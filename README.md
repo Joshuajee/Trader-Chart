@@ -1,0 +1,1 @@
+/sampleData/EURUSD.json

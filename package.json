@@ -1,0 +1,43 @@
+{
+  "name": "asset-chart",
+  "version": "1.0.0",
+  "description": "An app to visualize stock price",
+  "main": "server.js",
+  "scripts": {
+    "start": "node back-end/server.js",
+    "dev": "nodemon back-end/server.js"
+  },
+  "author": "Joshua Evuetapha",
+  "license": "ISC",
+  "dependencies": {
+    "compression": "^1.7.4",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.2",
+    "express-mongo-sanitize": "^2.1.0",
+    "express-rate-limit": "^6.0.4",
+    "helmet": "^4.6.0",
+    "hpp": "^0.2.3",
+    "mongoose": "^6.1.2",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.15",
+    "xss-clean": "^0.1.1"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-prettier": "^3.0.1",
+    "eslint-plugin-react": "^7.12.4",
+    "parcel-bundler": "^1.12.3",
+    "prettier": "^1.17.0"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "semi": true
+  }
+}

@@ -1,0 +1,69 @@
+.modal {
+    position: fixed;
+    top: 8em;
+    left: 24em;
+    width: 40em;
+    height: 26em;
+    background-color: white;
+    border-radius: 1em;
+    color: black;
+}
+
+.modal .title {
+    position: relative;
+    top: 0.4em;
+    left: 1em;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 2em;
+}
+
+.modal .container {
+    position: relative;
+    top: 1em;
+    left: 10%;
+    width: 80%;
+}
+
+.modal .container .parameter {
+    margin: 1em;
+}
+
+
+
+@media screen and (max-width: 600px) {
+
+    .modal {
+        position: fixed;
+        top: 8em;
+        left: 4%;
+        width: 92%;
+        height: 26em;
+        background-color: white;
+        border-radius: 1em;
+        color: black;
+    }
+    
+    .modal .title {
+        position: relative;
+        top: 0.4em;
+        left: 1em;
+        font-size: 30px;
+        font-weight: bold;
+        margin-bottom: 2em;
+    }
+    
+    .modal .container {
+        position: relative;
+        top: 1em;
+        left: 10%;
+        width: 80%;
+    }
+    
+    .modal .container .parameter {
+        margin: 1em;
+    }
+    
+    
+
+}

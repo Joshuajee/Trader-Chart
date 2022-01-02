@@ -1,0 +1,27 @@
+body {
+    width: 100%;
+    background: rgb(235, 240, 245);
+    height: 100vh;
+    color: white;
+    overflow-y: hidden;
+}
+
+.chart {
+    position: absolute;
+    top: 2em;
+    left: 16em;
+    z-index: 4;
+}
+
+
+@media screen and (max-width: 600px) {
+
+    .chart {
+        position: absolute;
+        top: 4em;
+        left: 0%;
+        z-index: 4;
+    }
+    
+
+}

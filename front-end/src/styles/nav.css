@@ -1,0 +1,131 @@
+.nav {
+    position: fixed;
+    top: 0px;
+    background: rgb(34, 45, 50);
+    color: white;
+    z-index: 1;
+}
+
+.topnav {
+    width: 100%;
+    height: 4em;
+}
+
+.sidenav {
+    position: fixed;
+    top: 4em;
+    width: 14em;
+    height: 96vh;
+}
+
+.sidenav .link {
+    font-size: 18px;
+    width: 100%;
+    height: 50px;
+    padding: 4px 0px 0px 30px;
+}
+
+
+.sidenav .items {
+    font-size: 18px;
+    height: 50px;
+    background-color: rgb(44, 59, 65);
+    padding: 4px 0px 0px 40px;
+}
+
+.tool-bar {
+    position: fixed;
+    top: 8px;
+    left: 14em;
+    width: 66em;
+    background-color: whitesmoke;
+    z-index: 2;
+    height: 3em;
+}
+
+.tool-bar .menu {
+    display: none;        
+}
+
+.tool-bar .tools {
+    position: absolute;
+    top: 0.6em;
+    right: 1em;
+}
+
+.tool-bar .tools .add-indicator {
+    margin-left: 10px;
+}
+
+
+@media screen and (max-width: 600px) {
+      
+    .nav {
+        position: fixed;
+        top: 0px;
+        background: rgb(34, 45, 50);
+        color: white;
+        z-index: 1;
+    }
+
+    .topnav {
+        width: 100%;
+        height: 4em;
+    }
+
+    .sidenav {
+        display: none;
+    }
+
+    .sidenav-mov {
+        display: block;
+        position: fixed;
+        top: 0;
+        width: 80%;
+        height:100vh;
+        z-index: 4;
+    }
+
+    .sidenav-mov .link {
+        font-size: 18px;
+        width: 100%;
+        height: 50px;
+        padding: 4px 0px 0px 30px;
+    }
+    
+    .sidenav-mov .items {
+        font-size: 18px;
+        height: 50px;
+        background-color: rgb(44, 59, 65);
+        padding: 4px 0px 0px 40px;
+    }
+
+    .tool-bar {
+        position: fixed;
+        top: 8px;
+        left: 4%;
+        width: 92%;
+        background-color: whitesmoke;
+        z-index: 2;
+        height: 3em;
+    }
+
+    .tool-bar .menu {
+        position: relative;
+        display: block;
+        left: 2%;
+        top: 16%;
+    }
+
+    .tool-bar .tools {
+        position: absolute;
+        top: 0.6em;
+        right: 1em;
+    }
+
+    .tool-bar .tools .add-indicator {
+        margin-left: 10px;
+    }
+
+
+}
