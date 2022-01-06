@@ -2,18 +2,21 @@ import moment from "moment";
 import axios from 'axios';
 import React, { useState, useEffect } from "react";
 import { connect } from 'react-redux';
-import { VictoryChart, VictoryTheme, VictoryZoomContainer, VictoryAxis,
-	VictoryCandlestick, VictoryLine, VictoryTooltip, LineSegment } from "victory";
+import { VictoryChart, VictoryZoomContainer, VictoryAxis,
+	VictoryCandlestick, VictoryLine, VictoryTooltip } from "victory";
 import ToolBar from "./ToolBar";
-import { updateAssets  } from './../../redux/actions';
+import { updateAssets, addIndicator  } from './../../redux/actions';
 //import {  zoomIn, zoomOutLogic } from "./logics";
 import Modal from "../Indicator/Modal";
-import movingAverages from "../Indicator/logics/movingAverages";
-import { pad } from "lodash";
+import findIndicator from "../Indicator/logics/indicator";
+import { VictoryGroup } from "victory";
+//import MovingAverages from "../Indicator/Trend/MovingAverages";
+
 
 const mapStateToProps = state => {
     return { 
-      assets: state.assets
+      assets: state.assets,
+	  indicators: state.indicators
     };
 };
   
@@ -21,6 +24,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         updateAssets: assets => dispatch(updateAssets(assets)),
+		addIndicator: indicators => dispatch(addIndicator(indicators)),
     };
 }
 
@@ -37,7 +41,7 @@ const toolStateObj = {
 
 const Chart = (props) => {
 
-	const { updateAssets, assets } = props;
+	const { updateAssets, assets, indicators } = props;
 
 	let height = window.screen.height;
 	let width = window.screen.width;
@@ -52,7 +56,8 @@ const Chart = (props) => {
 
 
 	const [data, setData] = useState(null)
-
+	const [start, setStart] = useState(0)
+	const [count] = useState(500)
 	const [symbol, setSymbol] = useState('EURUSD')
 	const [zoom, setZoom] = useState(150)
 	const [minX, setMinX] = useState(0)
@@ -62,27 +67,43 @@ const Chart = (props) => {
 	const [minLow, setMinLow] = useState(100)
 	const [toolState, setToolState] = useState(toolStateObj)
 	const [modal, setModal] = useState(false)
-	const [indicator, addIndicator] = useState([])
+	const [high, setHigh] = useState([])
+	const [low, setLow] = useState([])
+	const [loading, setLoading] = useState(false)
 
 
 	useEffect(() => {
 
 		if(data) {
-			const high = Math.max(...data?.slice(minX, maxX).map(item => item.values.high))
-			const low = Math.min(...data?.slice(minX, maxX).map(item => item.values.low))
-			const margin = high - low
-
-			setMaxHigh(high + (margin * padding))
-			setMinLow(low - (margin * padding))
+			setHigh(data?.map(item => item.values.high))
+			setLow(data?.map(item => item.values.low))
 		}
 
-	}, [minX, maxX, data])
+	}, [data])
+
+
+	useEffect(() => {
+
+		const highRange = high.slice(minX, maxX)
+		const lowRange = low.slice(minX, maxX)
+
+		const max = Math.max(...highRange)
+		const min = Math.min(...lowRange)
+		const margin = max - min
+
+		setMaxHigh(max + (margin * padding))
+		setMinLow(min - (margin * padding))
+
+	}, [minX, maxX, high, low])
 	
 	useEffect(() => {
 
 		const count = data ? (data?.length / 50 ) : 20
 		setMinX(maxX - zoom)
-		setCandleRatio(count - (zoom / 20))
+
+		const zoomRatio = 150 / zoom
+
+		setCandleRatio(zoomRatio * count / 5)
 
 	}, [minX, maxX, zoom, data])
 
@@ -98,6 +119,7 @@ const Chart = (props) => {
 		else if (!toolState.zoomIn)
 			setToolState({...toolState, zoomIn: true})
 
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [zoom])
 
 	const onDomainChange = domain => {
@@ -105,14 +127,17 @@ const Chart = (props) => {
 		setMinX(Math.ceil(domain.x[0]))
 		setMaxX(Math.ceil(domain.x[1]))
 
-		console.log(Math.ceil(domain.x[0]))
+		//console.log('Domain ', Math.ceil(domain.x[0]))
 
-		console.log(domain)
-	
+		const minDomain = Math.ceil(domain.x[0]);
+
+		if ((minDomain / count) < 0.3 && !loading && true) {
+			setStart(data.length)
+		}
+
 	}
 
 	const zoomOut = (zoom, setZoom) => {
-
 
 		if (zoom >= 2000)
 			console.log('maximum zoom out')
@@ -131,6 +156,7 @@ const Chart = (props) => {
 	
 	
 	const zoomIn = (zoom, setZoom) => {
+
 	
 		if (zoom <= 50)
 			console.log("maximum zoom in")
@@ -149,19 +175,29 @@ const Chart = (props) => {
 
 	useEffect(() => {
 
-		axios.get(process.env.REACT_APP_API + 'assets/EURUSD/M1/0/500').then( res => {
+		setLoading(true)
 
-			if (res.data.status === 'success') updateAssets({ data: res.data.data, count: res.data.count })
+		axios.get(process.env.REACT_APP_API + `assets/${symbol}/M1/${start}/${count}`).then( res => {
+
+			if (res.data.status === 'success') {
+
+				if (start === 0)
+					updateAssets({ data: res.data.data, count: res.data.count, start: true })
+				else updateAssets({ data: res.data.data, count: res.data.count, start: false })
+
+			}
+
+			setLoading(false)
 
 		}, err => {
-
+			setLoading(false)
 		})
 		
-	}, [updateAssets])
+	}, [start, count, symbol, updateAssets])
 
 	useEffect(() => {
 
-		if(assets[symbol] && !data) {
+		if(assets[symbol] && start === 0) {
 
 			const zoomPadding = Math.ceil(zoom / 3)
 
@@ -169,13 +205,20 @@ const Chart = (props) => {
 
 			setMaxX(assets[symbol].data.length + zoomPadding)
 
-			setMinX(assets[symbol].data.length - zoom + zoomPadding)
+			setMinX(assets[symbol].data.length - (zoom + zoomPadding))
 			
-		} else if(assets[symbol]) setData(assets[symbol].data)
+		} else if(assets[symbol]) {
 
+			setData(assets[symbol].data)
+
+			setMaxX(count + maxX)
+
+			setMinX(count + minX)
+
+		} 
+
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [assets, symbol, zoom])
-
-	console.log(" ---- ", assets[symbol]?.data)
 
 	
 	return (
@@ -213,46 +256,84 @@ const Chart = (props) => {
 							candleColors={{ positive: "green", negative: "red" }}
 							candleRatio={candleRatio}
 							labelComponent={<VictoryTooltip dy={0} />}
-							/*labels={({ datum }) => {
-								const t = new Date(datum.x)
+							labels={({ datum }) => {
+								const t = datum.x
 								const date = moment.utc(t).format("MMM Do YYYY")
 								const time = moment.utc(t).format("h:mm")
 								return (`
-										open: ${datum.open} \n 
-										high: ${datum.high} \n 
-										low: ${datum.low} \n
-										close: ${datum.close} \n
+										open: ${datum.values.open} \n 
+										high: ${datum.values.high} \n 
+										low: ${datum.values.low} \n
+										close: ${datum.values.close} \n
 										date: ${date} \n
 										time: ${time}
 										`)
-							}}*/
+							}}
 							/>
 
 					}
 
 					{
 
-						indicator.map(item => {
+						indicators[symbol]?.map(item => {
 
-							const points = movingAverages(data, item)
+							const points = findIndicator(data, item)
 
-							console.log(item)
-							console.log(points)
-
-
-							return <VictoryLine 
+							if (item.type === 'MA')
+								return <VictoryLine 
 										style={{
 											data: { stroke: item.color },
-											parent: { border: "1px solid #ccc"}
+											parent: { border: item.lineWidth }
 										}}
 										data={points}
 										x='x'
 										y='y'	
+										key={item.id}
 										/>
+
+
+							if (item.type === 'BB')
+								return (
+									<VictoryGroup>
+										<VictoryLine 
+											style={{
+												data: { stroke: item.color },
+												parent: { border: item.lineWidth}
+											}}
+											data={points}
+											x='x'
+											y='ub'	
+											key={item.id}
+											/>
+										<VictoryLine 
+											style={{
+												data: { stroke: item.color },
+												parent: { border: item.lineWidth}
+											}}
+											data={points}
+											x='x'
+											y='ma'	
+											key={item.id}
+											/>
+										<VictoryLine 
+											style={{
+												data: { stroke: item.color },
+												parent: { border: item.lineWidth}
+											}}
+											data={points}
+											x='x'
+											y='lb'	
+											key={item.id}
+											/>
+									</VictoryGroup>
+									)
+
+							return null
 						})
+
 					}
 
-					{ data &&
+				
 						<VictoryAxis
 							tickValues={data?.x}
 							tickFormat={(t, i) => {
@@ -273,7 +354,7 @@ const Chart = (props) => {
 							}
 						}
 						/>
-					}
+		
 
 					<VictoryAxis 
 						dependentAxis 
@@ -282,7 +363,7 @@ const Chart = (props) => {
 
 				</VictoryChart>
 
-				{ modal && <Modal setModal={setModal} addIndicator={addIndicator} indicators={indicator} /> }
+				{ modal && <Modal setModal={setModal} symbol={symbol} indicators={indicators} /> }
 
 			</div>
 

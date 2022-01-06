@@ -1,9 +1,10 @@
 import assetReducer from './assets';
 import { ASSETS, INDICATORS, SIDENAV } from "../constants/action-types";
+import indicatorReducer from './indicator';
 
 
 const initialState = {
-    indicators: [],
+    indicators: { },
     sideNav: false,
     assets: {}
 };
@@ -16,7 +17,7 @@ function rootReducer(state = initialState, action) {
 
     switch (action.type) {
         case INDICATORS:
-            return { ...state, indicators: payload }
+            return { ...state, indicators: indicatorReducer(state, payload) }
         case SIDENAV:
             return { ...state, sideNav: payload }
         case ASSETS:

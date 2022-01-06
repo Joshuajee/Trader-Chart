@@ -43,7 +43,7 @@ const ToolBar = (props) => {
                 <button 
                     className='add-indicator'
                     onClick={() => setModal(true)}
-                    > Add Indicator </button>
+                    > Indicator </button>
 
             </div>
 

@@ -27,11 +27,11 @@ const sma = (data, indicator) => {
 
             const avg = average(points.map(point => choosePrice(indicator.applyTo, point)))
 
-            return { x: points[indicator.period - 1]?.x, y: avg }
+            return { x: points[indicator.period - 1]?.timestamp, y: avg }
 
         }
 
-        return { x: current?.x, y: current.close }
+        return { x: current?.timestamp, y: current.values.close }
     })
 
 }
@@ -58,11 +58,11 @@ const ema = (data, indicator) => {
 
             result += _ema(points, 0)
 
-            return { x: points[indicator.period - 1]?.x, y: result }
+            return { x: current?.timestamp, y: result }
 
         }
 
-        return { x: current?.x, y: current.close }
+        return { x: current?.timestamp, y: current.values.close }
     })
 
 }
@@ -89,12 +89,11 @@ const lnw = (data, indicator) => {
 
             const points = data.slice(index - indicator.period, index)
 
-
-            return { x: points[indicator.period - 1]?.x, y: _lnw(points) }
+            return { x: current?.timestamp, y: _lnw(points) }
 
         }
 
-        return { x: current?.x, y: current.close }
+        return { x: current?.timestamp, y: current.close }
     })
 
 }
@@ -102,19 +101,19 @@ const lnw = (data, indicator) => {
 const choosePrice = (applyTo, data) => {
     switch (applyTo) {
         case 'open':
-            return data.open;
+            return data.values.open;
         case 'high':
-            return data.high;
+            return data.values.high;
         case 'low':
-            return data.low;
+            return data.values.low;
         case 'close':
-            return data.close;
+            return data.values.close;
         case 'median':
-            return (data.high + data.low) / 2;
+            return (data.values.high + data.values.low) / 2;
         case 'typical':
-            return (data.high + data.low + data.close) / 3;
+            return (data.values.high + data.values.low + data.values.close) / 3;
         case 'weighted':
-            return (data.high + data.low + data.close * 2) / 4;;
+            return (data.values.high + data.values.low + data.values.close * 2) / 4;;
         default:
             console.log('invalid application')
 
@@ -122,27 +121,9 @@ const choosePrice = (applyTo, data) => {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 export default movingAverages
+
+export {
+    sma,
+    choosePrice
+}

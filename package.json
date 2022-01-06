@@ -4,8 +4,8 @@
   "description": "An app to visualize stock price",
   "main": "server.js",
   "scripts": {
-    "start": "node back-end/server.js",
-    "dev": "nodemon back-end/server.js"
+    "start": "node server/server.js",
+    "dev": "nodemon server/server.js"
   },
   "author": "Joshua Evuetapha",
   "license": "ISC",
