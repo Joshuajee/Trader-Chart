@@ -11,8 +11,6 @@ const ChooseIndicator = (props) => {
                     <ul>
                         <li onClick={() => chooseIndicator("MA")}>Moving Average</li>
                         <li onClick={() => chooseIndicator("BB")}>Bollinger Band</li>
-                        <li onClick={() => chooseIndicator("MA")}>Moving Average</li>
-                        <li onClick={() => chooseIndicator("BB")}>Bollinger Band</li>
                     </ul>
 
                 </div>
@@ -23,9 +21,7 @@ const ChooseIndicator = (props) => {
                     
                     <ul>
                         <li onClick={() => chooseIndicator("RSI")}>Relative Strength Index (RSI)</li>
-                        <li>Moving Average</li>
-                        <li>Moving Average</li>
-                        <li>Moving Average</li>
+                        <li onClick={() => chooseIndicator("RSI")}>Relative Strength Index (RSI)</li>
                     </ul>
 
                 </div>

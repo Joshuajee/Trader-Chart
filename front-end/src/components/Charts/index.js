@@ -1,4 +1,3 @@
-import moment from "moment";
 import axios from 'axios';
 import React, { useState, useEffect } from "react";
 import { connect } from 'react-redux';
@@ -6,10 +5,13 @@ import { VictoryChart, VictoryZoomContainer, VictoryAxis,
 	VictoryCandlestick, VictoryLine, VictoryTooltip } from "victory";
 import ToolBar from "./ToolBar";
 import { updateAssets, addIndicator  } from './../../redux/actions';
-//import {  zoomIn, zoomOutLogic } from "./logics";
+import {  zoomIn, zoomOut } from "./logics/zoom";
+import { xAxisStyles, xAxisTicks } from "./logics/xAxis";
 import Modal from "../Indicator/Modal";
 import findIndicator from "../Indicator/logics/indicator";
 import { VictoryGroup } from "victory";
+import { yAxisStyles, yAxisTicks } from "./logics/yAxis";
+import { labels } from "./logics/candleChart";
 
 
 const mapStateToProps = state => {
@@ -42,8 +44,8 @@ const Chart = (props) => {
 
 	const { updateAssets, assets, indicators } = props;
 
-	const [width, ] = useState(window.screen.width * 0.8)
-	const [heightPadder, setHeightPadder] = useState(window.screen.height / 1000)
+	const [width, ] = useState(window.screen.width * 0.94)
+	const [heightPadder, ] = useState(0.84)
 	const [data, setData] = useState(null)
 	const [start, setStart] = useState(0)
 	const [count] = useState(500)
@@ -65,15 +67,6 @@ const Chart = (props) => {
 	const [noOfWindows, setNoOfWindows] = useState(0)
 	const [yTicks, setYTicks] = useState([])
 	const [rsiAxis,] = useState([...Array(101).keys()])
-
-
-	useEffect(() => {
-
-		if (window.screen.height < 700) {
-			setHeightPadder(window.screen.height / 720)
-		}
-
-	}, [height])
 
 
 	useEffect(() => {
@@ -167,41 +160,7 @@ const Chart = (props) => {
 
 	}
 
-	const zoomOut = (zoom, setZoom) => {
 
-		if (zoom >= 2000)
-			console.log('maximum zoom out')
-		else if (zoom >= 1000)
-				setZoom(Math.ceil(zoom + 400))
-		else if (zoom >= 800)
-				setZoom(Math.ceil(zoom + 200))
-		else if (zoom >= 600)
-				setZoom(Math.ceil(zoom + 200))
-		else if (zoom >= 400)
-				setZoom(Math.ceil(zoom + 100))
-		else if (zoom >= 0)
-				setZoom(Math.ceil(zoom + 50))
-	
-	}
-	
-	
-	const zoomIn = (zoom, setZoom) => {
-
-	
-		if (zoom <= 50)
-			console.log("maximum zoom in")
-		else if (zoom <= 100)
-				setZoom(Math.ceil(zoom - 50))
-		else if (zoom <= 400)
-				setZoom(Math.ceil(zoom - 100))
-		else if (zoom <= 600)
-				setZoom(Math.ceil(zoom - 200))
-		else if (zoom <= 800)
-				setZoom(Math.ceil(zoom - 200))
-		else if (zoom > 1000)
-				setZoom(Math.ceil(zoom - 400))
-	
-	}
 
 	useEffect(() => {
 
@@ -220,6 +179,7 @@ const Chart = (props) => {
 			setLoading(false)
 
 		}, err => {
+
 			setLoading(false)
 		})
 		
@@ -259,7 +219,7 @@ const Chart = (props) => {
 
 			if (element.type in list) {
 				count++
-				setHeight(window.screen.height * heightPadder * 0.8 ** count)
+				setHeight(window.screen.height * heightPadder * 0.7 ** count)
 			}
 
 		});
@@ -290,14 +250,14 @@ const Chart = (props) => {
 				<VictoryChart
 					height={height}
 					width={width}
-					domain={{ x: [minX, maxX]}}
+					domain={{ x: [minX, maxX], y: [minLow, maxHigh]}}
 					containerComponent={
 						<VictoryZoomContainer 
 							zoomDomain={{ x: [minX, maxX], y: [minLow, maxHigh]}}
 							onZoomDomainChange={onDomainChange}
 							/>
 						}
-					padding={{right: 60, bottom: noOfWindows? 0 : 50}}
+					padding={{right: 64, bottom: noOfWindows? 0 : 50, left: 0}}
 				    domainPadding={{ x: 25 }}
 					scale={{ x: "time" }}
 					
@@ -311,19 +271,7 @@ const Chart = (props) => {
 							candleColors={{ positive: "green", negative: "red" }}
 							candleRatio={candleRatio}
 							labelComponent={<VictoryTooltip dy={0} />}
-							labels={({ datum }) => {
-								const t = datum.x
-								const date = moment.utc(t).format("MMM Do YYYY")
-								const time = moment.utc(t).format("h:mm")
-								return (`
-										open: ${datum.values.open} \n 
-										high: ${datum.values.high} \n 
-										low: ${datum.values.low} \n
-										close: ${datum.values.close} \n
-										date: ${date} \n
-										time: ${time}
-										`)
-							}}
+							labels={({ datum }) => labels(datum)}
 							/>
 
 					}
@@ -396,43 +344,19 @@ const Chart = (props) => {
 					}
 
 				
-						<VictoryAxis
-							tickValues={data?.x}
-							tickFormat={(t, i) => {
-
-								const date = moment.utc(t).format("MMM Do, h:mm")
-
-								if (noOfWindows > 0) return ''
-
-								if (width <= 500)						
-									if (i % (zoom / 2 ) === 0) return `${date}`;
-									else return '';
-
-								if (width <= 600)						
-									if (i % (zoom / 3 ) === 0) return `${date}`;
-									else return '';
-
-								if (i % (zoom / 5 ) === 0) return `${date}`;
-								else return '';
-
-							}
-						}
-						/>
+					<VictoryAxis
+						tickValues={data?.x}
+						style={xAxisStyles(yTicks)}
+						tickFormat={(t, i) => xAxisTicks(t, i, noOfWindows, width, zoom)}
+					/>
 		
-
 					<VictoryAxis 
 						dependentAxis 
 						orientation="right"  
 						tickValues={yTicks}
-						tickFormat={(t, i) => { 
-
-							const spacing = Math.round(yTicks.length * 0.05)
-
-							if (i % spacing === 0 ) return t
-							else return ''
-
-						}}
-						/>
+						tickFormat={(t, i) => yAxisTicks(i, t, yTicks)}
+						style={yAxisStyles(yTicks)}
+					/>
 
 				</VictoryChart>
 
@@ -448,8 +372,8 @@ const Chart = (props) => {
 								<VictoryChart
 									width={width}
 									height={windowHeight}
-									domain={{ x: [minX, maxX]}}
-									padding={{right: 60}}
+									domain={{ x: [minX, maxX], y: [0, 100]}}
+									padding={{right: 60 }}
 									containerComponent={
 										<VictoryZoomContainer 
 											zoomDomain={{ x: [minX, maxX], y: [0, 100]}}
@@ -495,31 +419,14 @@ const Chart = (props) => {
 												if (tick === item.upperLevel || tick === item.lowerLevel) return "grey"
 											}},
 											ticks: {stroke: "grey", size: 5},
-											tickLabels: {fontSize: 15, padding: 5}
+											tickLabels: {fontSize: 12, padding: 5 }
 										  }}
 										/>
 
 									<VictoryAxis
 										tickValues={data?.x}
-										tickFormat={(t, i) => {
-
-											const date = moment.utc(t).format("MMM Do, h:mm")
-
-											//if (noOfWindows !== count) return ''
-
-											if (width <= 500)						
-												if (i % (zoom / 2 ) === 0) return `${date}`;
-												else return '';
-
-											if (width <= 600)						
-												if (i % (zoom / 3 ) === 0) return `${date}`;
-												else return '';
-
-											if (i % (zoom / 5 ) === 0) return `${date}`;
-											else return '';
-
-										}
-									}
+										style={xAxisStyles(yTicks)}
+										tickFormat={(t, i) => xAxisTicks(t, i, noOfWindows, width, zoom)}
 									/>
 					
 
