@@ -6,6 +6,7 @@ import MovingAverages from "./Modal/Trend/MovingAverages";
 import { addIndicator  } from './../../redux/actions';
 import BollingerBands from "./Modal/Trend/BollingerBands";
 import RSI from "./Modal/Oscilators/RSI";
+import ShowIndicators from "./ShowIndicators";
 
 const mapStateToProps = state => {
     return { 
@@ -43,13 +44,20 @@ const Modal = (props) => {
 
     }, [indicator])
 
+    useEffect(() => {
+        if (indicators[symbol]?.length > 0) chooseIndicator('update')
+    }, [indicators, symbol])
+
+    console.log(indicators[symbol])
 
     return (
         <div className="modal">
 
             <div className="title"> {title}  <span className="close" onClick={() => setModal(false)}> <IoIosClose size={40}/> </span> </div>
 
-            { !indicator && <ChooseIndicator chooseIndicator={chooseIndicator} /> }
+            { indicator === 'update' && <ShowIndicators chooseIndicator={chooseIndicator} indicators={indicators} symbol={symbol} />}
+
+            { indicator === 'add' && <ChooseIndicator chooseIndicator={chooseIndicator} /> }
 
             { indicator === "MA" &&
                 <MovingAverages 

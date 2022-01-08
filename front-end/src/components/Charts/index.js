@@ -2,7 +2,8 @@ import axios from 'axios';
 import React, { useState, useEffect } from "react";
 import { connect } from 'react-redux';
 import { VictoryChart, VictoryZoomContainer, VictoryAxis,
-	VictoryCandlestick, VictoryLine, VictoryTooltip } from "victory";
+	VictoryCandlestick, VictoryLine, VictoryTooltip, VictoryLegend, 
+	VictoryCursorContainer, VictoryScatter} from "victory";
 import ToolBar from "./ToolBar";
 import { updateAssets, addIndicator  } from './../../redux/actions';
 import {  zoomIn, zoomOut } from "./logics/zoom";
@@ -45,11 +46,12 @@ const Chart = (props) => {
 	const { updateAssets, assets, indicators } = props;
 
 	const [width, ] = useState(window.screen.width * 0.94)
-	const [heightPadder, ] = useState(0.84)
+	const [heightPadder, ] = useState(0.76)
 	const [data, setData] = useState(null)
 	const [start, setStart] = useState(0)
 	const [count] = useState(500)
 	const [symbol, setSymbol] = useState('EURUSD')
+	const [tf, setTf] = useState('M1')
 	const [zoom, setZoom] = useState(150)
 	const [minX, setMinX] = useState(0)
 	const [maxX, setMaxX] = useState(zoom)
@@ -166,7 +168,7 @@ const Chart = (props) => {
 
 		setLoading(true)
 
-		axios.get(process.env.REACT_APP_API + `assets/${symbol}/M1/${start}/${count}`).then( res => {
+		axios.get(process.env.REACT_APP_API + `assets/${symbol}/${tf}/${start}/${count}`).then( res => {
 
 			if (res.data.status === 'success') {
 
@@ -183,7 +185,7 @@ const Chart = (props) => {
 			setLoading(false)
 		})
 		
-	}, [start, count, symbol, updateAssets])
+	}, [start, count, symbol, updateAssets, tf])
 
 	useEffect(() => {
 
@@ -260,8 +262,24 @@ const Chart = (props) => {
 					padding={{right: 64, bottom: noOfWindows? 0 : 50, left: 0}}
 				    domainPadding={{ x: 25 }}
 					scale={{ x: "time" }}
+					events={{
+						onClick: (evt) => alert(`(${evt.clientX}, ${evt.clientY})`)
+					  }}
+
+
 					
 					>
+
+
+					<VictoryLegend x={12} y={10}
+						title={`${symbol}: ${tf}`}
+						centerTitle
+						orientation="horizontal"
+						gutter={20}
+						style={ {title: {fontSize: 20 } }}
+						data={[]}
+						/>
+
 					{data && 
 						<VictoryCandlestick
 							data={data} 
@@ -275,6 +293,7 @@ const Chart = (props) => {
 							/>
 
 					}
+
 
 					{
 
@@ -348,6 +367,7 @@ const Chart = (props) => {
 						tickValues={data?.x}
 						style={xAxisStyles(yTicks)}
 						tickFormat={(t, i) => xAxisTicks(t, i, noOfWindows, width, zoom)}
+						name='x-axis'
 					/>
 		
 					<VictoryAxis 
@@ -356,7 +376,10 @@ const Chart = (props) => {
 						tickValues={yTicks}
 						tickFormat={(t, i) => yAxisTicks(i, t, yTicks)}
 						style={yAxisStyles(yTicks)}
+			
 					/>
+
+
 
 				</VictoryChart>
 

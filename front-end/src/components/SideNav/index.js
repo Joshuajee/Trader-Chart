@@ -25,11 +25,24 @@ const SideNav = (props) => {
     return (
         <div  className={`nav sidenav ${sideNav? 'sidenav-mov' : ''}`}>
 
-            { sideNav && <div className="link" onClick={() => showSideNav(false)}> <IoIosClose size={40}/> </div>}
+            <div className='logo'> 
+                Trader Chart 
+            </div>
+
+            { sideNav && 
+                    <div 
+                        className="link" 
+                        onClick={() => showSideNav(false)}> <IoIosClose size={40}/> </div>}
             
-            <div className="link">Forex</div>
-            <div className="link">Crypto</div>
-            <div className="link">Stocks</div>
+
+            <div className='navs'>
+
+                <div className="link">Forex</div>
+                <div className="link">Crypto</div>
+                <div className="link">Stocks</div>
+
+            </div>
+
 
         </div>
     )

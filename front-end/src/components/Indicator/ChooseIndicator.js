@@ -5,6 +5,8 @@ const ChooseIndicator = (props) => {
     return (
             <div className="container">
 
+                <button onClick={() => chooseIndicator('update')}>Edit/Delete Indicator</button>
+
                 <div>
                     <p>Trend </p>
 
