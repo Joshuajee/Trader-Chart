@@ -5,6 +5,7 @@ import ChooseIndicator from "./ChooseIndicator";
 import MovingAverages from "./Modal/Trend/MovingAverages";
 import { addIndicator  } from './../../redux/actions';
 import BollingerBands from "./Modal/Trend/BollingerBands";
+import RSI from "./Modal/Oscilators/RSI";
 
 const mapStateToProps = state => {
     return { 
@@ -66,6 +67,16 @@ const Modal = (props) => {
                     setModal={setModal}
                     symbol={symbol}
                     />
+            }
+
+            {
+                indicator === "RSI" &&
+                    <RSI 
+                        addIndicator={addIndicator}
+                        indicators={indicators}
+                        setModal={setModal}
+                        symbol={symbol}
+                        />
             }
 
         </div>

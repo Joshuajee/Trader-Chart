@@ -8,9 +8,11 @@ body {
 
 .chart {
     position: absolute;
-    top: 2em;
+    top: 5em;
     left: 16em;
+    /*bottom: 2em;*/
     z-index: 4;
+    /*width: 66em;*/
 }
 
 
@@ -18,9 +20,10 @@ body {
 
     .chart {
         position: absolute;
-        top: 4em;
-        left: 0%;
+        top: 5em;
+        left: 4em;
         z-index: 4;
+        /*width: 20em;*/
     }
     
 

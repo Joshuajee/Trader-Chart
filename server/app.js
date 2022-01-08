@@ -57,24 +57,15 @@ app.use(compression());
 // 3) ROUTES
 app.use('/api/v1/assets', assetRouter);
 
-
 app.use(express.static(path.join(__dirname, '../front-end/build')));
 
 app.get('/', (req, res) =>{  
-
   res.sendFile(path.resolve(__dirname, "../front-end", "build", "index.html"))
-  console.log(path.resolve(__dirname, "../front-end", "build", "index.html"))
-
 })
 
 app.get('/*', (req, res) =>{  
-
   res.sendFile(path.resolve(__dirname, "../front-end", "build", "index.html"))
-  console.log(path.resolve(__dirname, "../front-end", "build", "index.html"))
-
 })
-
-
 
 
 //app.use(globalErrorHandler);

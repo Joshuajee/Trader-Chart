@@ -22,7 +22,7 @@ const ChooseIndicator = (props) => {
                     <p>Oscilators </p>
                     
                     <ul>
-                        <li>Moving Average</li>
+                        <li onClick={() => chooseIndicator("RSI")}>Relative Strength Index (RSI)</li>
                         <li>Moving Average</li>
                         <li>Moving Average</li>
                         <li>Moving Average</li>

@@ -30,18 +30,18 @@ const ToolBar = (props) => {
 
             <div className='tools'>
 
-                <BsZoomIn onClick={zoomIn} style={{}} color={state.zoomIn ? 'green': 'gray' } />
+                <BsZoomIn size={28} onClick={zoomIn} style={{}} color={state.zoomIn ? 'green': 'gray' } />
             
-                <BsZoomOut onClick={zoomOut} style={{marginLeft: '10px'}} color={state.zoomOut ? 'green': 'gray' } /> 
+                <BsZoomOut size={28} onClick={zoomOut} style={{marginLeft: '10px'}} color={state.zoomOut ? 'green': 'gray' } /> 
 
-                <BsDashLg style={{marginLeft: '10px'}} color='gray' />
+                <BsDashLg size={28} style={{marginLeft: '10px'}} color='gray' />
 
-                <BsDashLg style={{marginLeft: '10px', transform: 'rotate(315deg)'}} color='gray' />
+                <BsDashLg size={28} style={{marginLeft: '10px', transform: 'rotate(315deg)'}} color='gray' />
 
-                <BsPlusLg style={{marginLeft: '10px'}} color='gray' />
+                <BsPlusLg size={28} style={{marginLeft: '10px'}} color='gray' />
 
                 <button 
-                    className='add-indicator'
+                    className='indicator'
                     onClick={() => setModal(true)}
                     > Indicator </button>
 

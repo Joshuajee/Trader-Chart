@@ -10,7 +10,6 @@ import { updateAssets, addIndicator  } from './../../redux/actions';
 import Modal from "../Indicator/Modal";
 import findIndicator from "../Indicator/logics/indicator";
 import { VictoryGroup } from "victory";
-//import MovingAverages from "../Indicator/Trend/MovingAverages";
 
 
 const mapStateToProps = state => {
@@ -43,18 +42,8 @@ const Chart = (props) => {
 
 	const { updateAssets, assets, indicators } = props;
 
-	let height = window.screen.height;
-	let width = window.screen.width;
-
-	if (width > 600 ) {
-		height = height * 0.8;
-		width = width * 0.8;
-	} else {
-		height = height * 0.88;
-		width = width * 0.96;
-	}
-
-
+	const [width, ] = useState(window.screen.width * 0.8)
+	const [heightPadder, setHeightPadder] = useState(window.screen.height / 1000)
 	const [data, setData] = useState(null)
 	const [start, setStart] = useState(0)
 	const [count] = useState(500)
@@ -70,7 +59,28 @@ const Chart = (props) => {
 	const [high, setHigh] = useState([])
 	const [low, setLow] = useState([])
 	const [loading, setLoading] = useState(false)
+	const [initialHeight, ] = useState(window.screen.height * heightPadder);
+	const [height, setHeight] = useState(initialHeight)
+	const [windowHeight, setWindowHeight] = useState(0)
+	const [noOfWindows, setNoOfWindows] = useState(0)
+	const [yTicks, setYTicks] = useState([])
+	const [rsiAxis,] = useState([...Array(101).keys()])
 
+
+	useEffect(() => {
+
+		if (window.screen.height < 700) {
+			setHeightPadder(window.screen.height / 720)
+		}
+
+	}, [height])
+
+
+	useEffect(() => {
+
+		setHeight(window.screen.height * heightPadder)
+
+	}, [heightPadder])
 
 	useEffect(() => {
 
@@ -80,6 +90,24 @@ const Chart = (props) => {
 		}
 
 	}, [data])
+
+
+	useEffect(() => {
+
+		const max = maxHigh;
+		const min = minLow;
+
+		const interval = 10 ** -5;
+
+		let array = []
+
+		for (let i = min; i < max; i += interval) {
+			array.push(Number(i.toFixed(5)))
+		}
+
+		setYTicks(array)
+
+	}, [maxHigh, minLow])
 
 
 	useEffect(() => {
@@ -95,6 +123,11 @@ const Chart = (props) => {
 		setMinLow(min - (margin * padding))
 
 	}, [minX, maxX, high, low])
+
+	useEffect(() => {
+
+
+	}, [])
 	
 	useEffect(() => {
 
@@ -110,24 +143,21 @@ const Chart = (props) => {
 	useEffect(() => {
 
 		if (zoom >= 2000)
-			setToolState({...toolState, zoomOut: false})
-		else if (!toolState.zoomOut)
-			setToolState({...toolState, zoomOut: true})
+			setToolState(ts => { ts.zoomOut = false; return ts; })
+		else 
+			setToolState(ts => { ts.zoomOut = true; return ts; })
 
 		if (zoom <= 50)
-			setToolState({...toolState, zoomIn: false})
-		else if (!toolState.zoomIn)
-			setToolState({...toolState, zoomIn: true})
+			setToolState(ts => { ts.zoomIn = false; return ts; })
+		else 
+			setToolState(ts => { ts.zoomIn = true; return ts; })
 
-	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [zoom])
 
 	const onDomainChange = domain => {
 
 		setMinX(Math.ceil(domain.x[0]))
 		setMaxX(Math.ceil(domain.x[1]))
-
-		//console.log('Domain ', Math.ceil(domain.x[0]))
 
 		const minDomain = Math.ceil(domain.x[0]);
 
@@ -211,14 +241,38 @@ const Chart = (props) => {
 
 			setData(assets[symbol].data)
 
-			setMaxX(count + maxX)
+			setMaxX(x => x + count)
 
-			setMinX(count + minX)
+			setMinX(x => x + count)
 
 		} 
 
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [assets, symbol, zoom])
+	}, [assets, symbol, zoom, count])
+
+	useEffect(() => {
+
+		const list = { RSI: '' }
+
+		let count = 0
+
+		indicators[symbol]?.forEach(element => {
+
+			if (element.type in list) {
+				count++
+				setHeight(window.screen.height * heightPadder * 0.8 ** count)
+			}
+
+		});
+
+		setNoOfWindows(count)
+
+	}, [indicators, symbol, heightPadder])
+
+	useEffect(() => {
+
+		setWindowHeight(Math.abs(initialHeight - height) / noOfWindows )
+
+	}, [initialHeight, height, noOfWindows])
 
 	
 	return (
@@ -243,7 +297,8 @@ const Chart = (props) => {
 							onZoomDomainChange={onDomainChange}
 							/>
 						}
-					domainPadding={{ x: 25 }}
+					padding={{right: 60, bottom: noOfWindows? 0 : 50}}
+				    domainPadding={{ x: 25 }}
 					scale={{ x: "time" }}
 					
 					>
@@ -277,9 +332,10 @@ const Chart = (props) => {
 
 						indicators[symbol]?.map(item => {
 
-							const points = findIndicator(data, item)
+							if (item.type === 'MA') {
 
-							if (item.type === 'MA')
+								const points = findIndicator(data, item)
+
 								return <VictoryLine 
 										style={{
 											data: { stroke: item.color },
@@ -290,11 +346,15 @@ const Chart = (props) => {
 										y='y'	
 										key={item.id}
 										/>
+									}
 
 
-							if (item.type === 'BB')
+							if (item.type === 'BB') {
+
+								const points = findIndicator(data, item)
+
 								return (
-									<VictoryGroup>
+									<VictoryGroup key={item.id}>
 										<VictoryLine 
 											style={{
 												data: { stroke: item.color },
@@ -328,6 +388,8 @@ const Chart = (props) => {
 									</VictoryGroup>
 									)
 
+								}
+
 							return null
 						})
 
@@ -339,6 +401,8 @@ const Chart = (props) => {
 							tickFormat={(t, i) => {
 
 								const date = moment.utc(t).format("MMM Do, h:mm")
+
+								if (noOfWindows > 0) return ''
 
 								if (width <= 500)						
 									if (i % (zoom / 2 ) === 0) return `${date}`;
@@ -359,9 +423,117 @@ const Chart = (props) => {
 					<VictoryAxis 
 						dependentAxis 
 						orientation="right"  
+						tickValues={yTicks}
+						tickFormat={(t, i) => { 
+
+							const spacing = Math.round(yTicks.length * 0.05)
+
+							if (i % spacing === 0 ) return t
+							else return ''
+
+						}}
 						/>
 
 				</VictoryChart>
+
+				{
+
+					indicators[symbol]?.map(item => {
+
+						if (item.type === 'RSI') {
+
+							const points = findIndicator(data, item)
+
+							return (
+								<VictoryChart
+									width={width}
+									height={windowHeight}
+									domain={{ x: [minX, maxX]}}
+									padding={{right: 60}}
+									containerComponent={
+										<VictoryZoomContainer 
+											zoomDomain={{ x: [minX, maxX], y: [0, 100]}}
+											onZoomDomainChange={onDomainChange}
+											/>
+										}
+									scale={{x: "time"}}
+									key={item.id}>
+
+									<VictoryLine 
+										style={{
+											data: { stroke: item.color },
+											parent: { border: item.lineWidth}
+										}}
+										data={points}
+										x='x'
+										y='y'	
+										//key={item.id}
+										/>
+
+									<VictoryAxis 
+										dependentAxis 
+										orientation="right" 
+										tickValues={rsiAxis} 
+										tickFormat={(t, i) => { 
+											switch (i) {
+												case 0:
+													return t
+												case 100:
+													return t
+												case item.upperLevel:
+													return t
+												case item.lowerLevel:
+													return t	
+												default:
+													return ''
+											}
+										}}
+										style={{
+											axis: {stroke: "#756f6a"},
+											axisLabel: {fontSize: 20, padding: 30},
+											grid: {stroke: ({ tick }) => {
+												if (tick === item.upperLevel || tick === item.lowerLevel) return "grey"
+											}},
+											ticks: {stroke: "grey", size: 5},
+											tickLabels: {fontSize: 15, padding: 5}
+										  }}
+										/>
+
+									<VictoryAxis
+										tickValues={data?.x}
+										tickFormat={(t, i) => {
+
+											const date = moment.utc(t).format("MMM Do, h:mm")
+
+											//if (noOfWindows !== count) return ''
+
+											if (width <= 500)						
+												if (i % (zoom / 2 ) === 0) return `${date}`;
+												else return '';
+
+											if (width <= 600)						
+												if (i % (zoom / 3 ) === 0) return `${date}`;
+												else return '';
+
+											if (i % (zoom / 5 ) === 0) return `${date}`;
+											else return '';
+
+										}
+									}
+									/>
+					
+
+								</VictoryChart>
+								)
+
+						}
+
+
+					return null
+				})
+
+				}
+
 
 				{ modal && <Modal setModal={setModal} symbol={symbol} indicators={indicators} /> }
 

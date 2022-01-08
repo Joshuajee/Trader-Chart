@@ -1,5 +1,6 @@
 import bollingerBands from "./bollingerBands";
 import movingAverages from "./movingAverages";
+import rsi from "./rsi";
 
 
 const findIndicator = (data, indicator) => {
@@ -11,8 +12,8 @@ const findIndicator = (data, indicator) => {
             return movingAverages(data, indicator).splice(indicator.period, range);
         case 'BB':
             return bollingerBands(data, indicator).splice(indicator.period, range);
-        case 'LNW':
-            return movingAverages(data, indicator);
+        case 'RSI':
+            return rsi(data, indicator)//.splice(indicator.period, range);
         default:
             console.log('Invalid Indicator')
 

@@ -53,8 +53,11 @@
     right: 1em;
 }
 
-.tool-bar .tools .add-indicator {
+.tool-bar .tools .indicator {
     margin-left: 10px;
+    position: relative;
+    top: -0.6em;
+    height: 2em;
 }
 
 
@@ -123,8 +126,11 @@
         right: 1em;
     }
 
-    .tool-bar .tools .add-indicator {
+    .tool-bar .tools .indicator {
         margin-left: 10px;
+        position: relative;
+        top: -0.6em;
+        height: 2em;
     }
 
 
