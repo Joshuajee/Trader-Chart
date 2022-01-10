@@ -2,17 +2,17 @@ import axios from 'axios';
 import React, { useState, useEffect } from "react";
 import { connect } from 'react-redux';
 import { VictoryChart, VictoryZoomContainer, VictoryAxis,
-	VictoryCandlestick, VictoryLine, VictoryTooltip, VictoryLegend, 
-	VictoryCursorContainer, VictoryScatter} from "victory";
+	VictoryCandlestick, VictoryLine, VictoryTooltip, VictoryLegend } from "victory";
 import ToolBar from "./ToolBar";
-import { updateAssets, addIndicator  } from './../../redux/actions';
-import {  zoomIn, zoomOut } from "./logics/zoom";
+import { updateAssets, addIndicator, updateIndicator  } from './../../redux/actions';
+import {  domainController, zoomController, zoomIn, zoomOut } from "./logics/zoom";
 import { xAxisStyles, xAxisTicks } from "./logics/xAxis";
 import Modal from "../Indicator/Modal";
 import findIndicator from "../Indicator/logics/indicator";
 import { VictoryGroup } from "victory";
 import { yAxisStyles, yAxisTicks } from "./logics/yAxis";
 import { labels } from "./logics/candleChart";
+import NewWindow from '../Indicator/Oscilators';
 
 
 const mapStateToProps = state => {
@@ -27,6 +27,7 @@ const mapDispatchToProps = dispatch => {
     return {
         updateAssets: assets => dispatch(updateAssets(assets)),
 		addIndicator: indicators => dispatch(addIndicator(indicators)),
+		updateIndicator: indicators => dispatch(updateIndicator(indicators)),
     };
 }
 
@@ -52,7 +53,7 @@ const Chart = (props) => {
 	const [count] = useState(500)
 	const [symbol, setSymbol] = useState('EURUSD')
 	const [tf, setTf] = useState('M1')
-	const [zoom, setZoom] = useState(150)
+	const [zoom, setZoom] = useState(50)
 	const [minX, setMinX] = useState(0)
 	const [maxX, setMaxX] = useState(zoom)
 	const [candleRatio, setCandleRatio] = useState(20 - zoom / 10)
@@ -121,11 +122,6 @@ const Chart = (props) => {
 
 	useEffect(() => {
 
-
-	}, [])
-	
-	useEffect(() => {
-
 		const count = data ? (data?.length / 50 ) : 20
 		setMinX(maxX - zoom)
 
@@ -135,19 +131,8 @@ const Chart = (props) => {
 
 	}, [minX, maxX, zoom, data])
 
-	useEffect(() => {
 
-		if (zoom >= 2000)
-			setToolState(ts => { ts.zoomOut = false; return ts; })
-		else 
-			setToolState(ts => { ts.zoomOut = true; return ts; })
-
-		if (zoom <= 50)
-			setToolState(ts => { ts.zoomIn = false; return ts; })
-		else 
-			setToolState(ts => { ts.zoomIn = true; return ts; })
-
-	}, [zoom])
+	useEffect(() => zoomController(zoom, setToolState), [zoom])
 
 	const onDomainChange = domain => {
 
@@ -187,29 +172,7 @@ const Chart = (props) => {
 		
 	}, [start, count, symbol, updateAssets, tf])
 
-	useEffect(() => {
-
-		if(assets[symbol] && start === 0) {
-
-			const zoomPadding = Math.ceil(zoom / 3)
-
-			setData(assets[symbol].data)
-
-			setMaxX(assets[symbol].data.length + zoomPadding)
-
-			setMinX(assets[symbol].data.length - (zoom + zoomPadding))
-			
-		} else if(assets[symbol]) {
-
-			setData(assets[symbol].data)
-
-			setMaxX(x => x + count)
-
-			setMinX(x => x + count)
-
-		} 
-
-	}, [assets, symbol, zoom, count])
+	useEffect(() => domainController(assets, symbol, zoom, count, start, setData, setMaxX, setMinX), [assets, symbol, zoom, count])
 
 	useEffect(() => {
 
@@ -259,15 +222,12 @@ const Chart = (props) => {
 							onZoomDomainChange={onDomainChange}
 							/>
 						}
-					padding={{right: 64, bottom: noOfWindows? 0 : 50, left: 0}}
+					padding={{right: 64, bottom: 30, left: 0}}
 				    domainPadding={{ x: 25 }}
 					scale={{ x: "time" }}
 					events={{
 						onClick: (evt) => alert(`(${evt.clientX}, ${evt.clientY})`)
 					  }}
-
-
-					
 					>
 
 
@@ -365,9 +325,8 @@ const Chart = (props) => {
 				
 					<VictoryAxis
 						tickValues={data?.x}
-						style={xAxisStyles(yTicks)}
+						style={xAxisStyles(maxX - minX)}
 						tickFormat={(t, i) => xAxisTicks(t, i, noOfWindows, width, zoom)}
-						name='x-axis'
 					/>
 		
 					<VictoryAxis 
@@ -376,93 +335,19 @@ const Chart = (props) => {
 						tickValues={yTicks}
 						tickFormat={(t, i) => yAxisTicks(i, t, yTicks)}
 						style={yAxisStyles(yTicks)}
-			
 					/>
 
 
 
 				</VictoryChart>
 
-				{
-
-					indicators[symbol]?.map(item => {
-
-						if (item.type === 'RSI') {
-
-							const points = findIndicator(data, item)
-
-							return (
-								<VictoryChart
-									width={width}
-									height={windowHeight}
-									domain={{ x: [minX, maxX], y: [0, 100]}}
-									padding={{right: 60 }}
-									containerComponent={
-										<VictoryZoomContainer 
-											zoomDomain={{ x: [minX, maxX], y: [0, 100]}}
-											onZoomDomainChange={onDomainChange}
-											/>
-										}
-									scale={{x: "time"}}
-									key={item.id}>
-
-									<VictoryLine 
-										style={{
-											data: { stroke: item.color },
-											parent: { border: item.lineWidth}
-										}}
-										data={points}
-										x='x'
-										y='y'	
-										//key={item.id}
-										/>
-
-									<VictoryAxis 
-										dependentAxis 
-										orientation="right" 
-										tickValues={rsiAxis} 
-										tickFormat={(t, i) => { 
-											switch (i) {
-												case 0:
-													return t
-												case 100:
-													return t
-												case item.upperLevel:
-													return t
-												case item.lowerLevel:
-													return t	
-												default:
-													return ''
-											}
-										}}
-										style={{
-											axis: {stroke: "#756f6a"},
-											axisLabel: {fontSize: 20, padding: 30},
-											grid: {stroke: ({ tick }) => {
-												if (tick === item.upperLevel || tick === item.lowerLevel) return "grey"
-											}},
-											ticks: {stroke: "grey", size: 5},
-											tickLabels: {fontSize: 12, padding: 5 }
-										  }}
-										/>
-
-									<VictoryAxis
-										tickValues={data?.x}
-										style={xAxisStyles(yTicks)}
-										tickFormat={(t, i) => xAxisTicks(t, i, noOfWindows, width, zoom)}
-									/>
-					
-
-								</VictoryChart>
-								)
-
-						}
-
-
-					return null
-				})
-
+				{ data && <NewWindow 
+							indicators={indicators} symbol={symbol} data={data}
+							findIndicator={findIndicator} width={width} windowHeight={windowHeight} 
+							minX={minX} maxX={maxX} onDomainChange={onDomainChange} rsiAxis={rsiAxis} 
+							noOfWindows={noOfWindows} zoom={zoom} yTicks={yTicks} />
 				}
+
 
 
 				{ modal && <Modal setModal={setModal} symbol={symbol} indicators={indicators} /> }

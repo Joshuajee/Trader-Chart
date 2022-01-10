@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Action from "../Utils/Action";
 import ApplyTo from "../Utils/ApplyTo";
 import LineWidth from "../Utils/LineWidth";
 
@@ -13,8 +14,8 @@ const indicator = {
 
 const BollingerBands = (props) => {
 
-    const { addIndicator, symbol, setModal } = props
-    const [data, setData] = useState(indicator)
+    const { addIndicator, updateIndicator, deleteIndicator, symbol, setModal, update } = props
+    const [data, setData] = useState(update? update : indicator)
 
     return (
         <div className="container">
@@ -47,10 +48,13 @@ const BollingerBands = (props) => {
 
             <LineWidth setData={setData} data={data} />
 
-            <button onClick={() => { 
-                addIndicator({ indicator: data, symbol: symbol }); 
-                setModal(false); 
-            }} > OK </button>
+
+            <Action 
+                updateIndicator={updateIndicator} 
+                addIndicator={addIndicator} 
+                deleteIndicator={deleteIndicator} 
+                symbol={symbol} setModal={setModal} data={data}
+                update={update} />
 
         </div>
     )

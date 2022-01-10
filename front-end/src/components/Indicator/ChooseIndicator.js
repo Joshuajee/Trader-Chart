@@ -1,11 +1,13 @@
 const ChooseIndicator = (props) => {
 
-    const { chooseIndicator } = props
+    const { chooseIndicator, indicators, symbol } = props
 
     return (
             <div className="container">
 
+            { (indicators[symbol]?.length > 0) &&
                 <button onClick={() => chooseIndicator('update')}>Edit/Delete Indicator</button>
+            }
 
                 <div>
                     <p>Trend </p>
@@ -23,7 +25,7 @@ const ChooseIndicator = (props) => {
                     
                     <ul>
                         <li onClick={() => chooseIndicator("RSI")}>Relative Strength Index (RSI)</li>
-                        <li onClick={() => chooseIndicator("RSI")}>Relative Strength Index (RSI)</li>
+                        <li onClick={() => chooseIndicator("MACD")}>Moving Average Convergence Divergence (MACD)</li>
                     </ul>
 
                 </div>

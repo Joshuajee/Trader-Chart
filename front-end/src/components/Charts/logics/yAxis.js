@@ -28,12 +28,6 @@ const yAxisTicks = (i, t, yTicks) => {
 
 }
 
-const yIndicatorFont = () => {
-    
-}
-
-
-
 export {
     yAxisStyles,
     yAxisTicks

@@ -1,8 +1,7 @@
-import { } from 'react-icons/bs';
 import { IoIosClose } from 'react-icons/io';
 import { connect } from 'react-redux';
 import { showSideNav  } from './../../redux/actions';
-import Link from "./SideNavLink";
+
 
 const mapStateToProps = state => {
     return { 
@@ -31,7 +30,7 @@ const SideNav = (props) => {
 
             { sideNav && 
                     <div 
-                        className="link" 
+                        className="close" 
                         onClick={() => showSideNav(false)}> <IoIosClose size={40}/> </div>}
             
 

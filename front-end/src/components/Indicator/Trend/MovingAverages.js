@@ -2,7 +2,9 @@ import React from "react";
 import { VictoryGroup, VictoryLine } from "victory"
 
 
-const MovingAverages = ({indicator, data}) => {
+const MovingAverages = ({indicator, data, update}) => {
+
+    console.log(' update ' + update)
 
 
     return (

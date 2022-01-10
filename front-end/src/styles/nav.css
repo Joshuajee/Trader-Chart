@@ -30,6 +30,10 @@
     top: 4em;
 }
 
+.sidenav .close {
+    position: absolute;
+    left: 16em;
+}
 
 .sidenav .navs .link {
     font-size: 18px;

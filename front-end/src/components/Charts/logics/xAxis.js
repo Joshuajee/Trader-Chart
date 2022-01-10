@@ -1,12 +1,12 @@
 import moment from "moment"
 
-const xAxisStyles = (yTicks) => {
+const xAxisStyles = (ticks) => {
 
     return {
         axis: {stroke: "#756f6a"},
         axisLabel: {fontSize: 20, padding: 30},
         grid: {stroke: ({index}) => {     
-            const spacing = Math.round(yTicks.length * 0.05)
+            const spacing = Math.round(ticks * 0.05)
 
             if (index % spacing === 0 ) return 'grey'
             else return ''
@@ -20,8 +20,6 @@ const xAxisStyles = (yTicks) => {
 const xAxisTicks = (t, i, noOfWindows, width, zoom) => {
 
     const date = moment.utc(t).format("MMM Do, h:mm")
-
-    if (noOfWindows > 0) return ''
 
     if (width <= 500)						
         if (i % (zoom / 2 ) === 0) return `${date}`;

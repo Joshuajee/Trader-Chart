@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Action from "../Utils/Action";
 import ApplyTo from "../Utils/ApplyTo";
 import LineWidth from "../Utils/LineWidth";
 
@@ -13,10 +14,9 @@ const indicator = {
 
 const MovingAverages = (props) => {
 
-    const { addIndicator, setModal, symbol } = props
+    const { addIndicator, updateIndicator, deleteIndicator, setModal, symbol, update } = props
 
-
-    const [data, setData] = useState(indicator)
+    const [data, setData] = useState(update? update : indicator)
 
 
     return (
@@ -26,35 +26,37 @@ const MovingAverages = (props) => {
             
                 <input 
                     type={'text'} 
-                    defaultValue={10}
+                    defaultValue={data?.period}
                     onChange={(e) => setData({...data, period: e.target.value})} /> </div>
 
                 <div className="parameter"> 
 
                     Method: 
                     <select onClick={(e) => setData({...data, method: e.target.value})} > 
-                        <option value={'SMA'}> Simple Moving Average </option> 
-                        <option value={'EMA'}>Exponetial Moving Average </option> 
-                        <option value={'LNW'}> Linear Weighted Moving Average </option> 
+                        <option selected={data?.method === 'SMA' ? 'selected' : ''} value={'SMA'}> Simple Moving Average </option> 
+                        <option selected={data?.method === 'EMA' ? 'selected' : ''} value={'EMA'}>Exponetial Moving Average </option> 
+                        <option selected={data?.method === 'LNW' ? 'selected' : ''} value={'LNW'}> Linear Weighted Moving Average </option> 
                     </select> 
 
                 </div>
 
 
-            <ApplyTo setData={setData} data={data} />
+            <ApplyTo setData={setData} data={data}  />
 
             <div className="parameter"> 
 
-                Color:  <input type="color" defaultValue={indicator.color} onChange={(e) => setData({ ...data, color: e.target.value }) }/>
+                Color:  <input type="color" defaultValue={data.color} onChange={(e) => setData({ ...data, color: e.target.value }) }/>
 
             </div>
 
             <LineWidth setData={setData} data={data} />
 
-            <button onClick={() => { 
-                addIndicator({ indicator: data, symbol: symbol }); 
-                setModal(false); 
-            }} > OK </button>
+            <Action 
+                updateIndicator={updateIndicator} 
+                addIndicator={addIndicator} 
+                deleteIndicator={deleteIndicator} 
+                symbol={symbol} setModal={setModal} data={data}
+                update={update} />
 
         </div>
     )

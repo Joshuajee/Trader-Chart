@@ -1,9 +1,4 @@
-import {ASSETS, INDICATORS, SIDENAV } from "../constants/action-types";
-
-export function addIndicator(payload) {
-  console.log("Add Indicator", payload)
-  return { type: INDICATORS, payload };
-}
+import {ASSETS, INDICATORS, SIDENAV, UPDATE_INDICATOR } from "../constants/action-types";
 
 export function showSideNav(payload) {
   console.log("Show Side Navigator", payload)
@@ -15,3 +10,17 @@ export function updateAssets(payload) {
   return { type: ASSETS, payload };
 }
 
+export function addIndicator(payload) {
+  console.log("Add Indicator", payload)
+  return { type: INDICATORS, payload };
+}
+
+export function updateIndicator(payload) {
+  console.log("Update Indicator", payload)
+  return { type: UPDATE_INDICATOR, payload };
+}
+
+export function deleteIndicator(payload) {
+  console.log("Delete Indicator", payload)
+  return { type: UPDATE_INDICATOR, payload };
+}

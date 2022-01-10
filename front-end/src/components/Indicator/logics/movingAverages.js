@@ -125,5 +125,6 @@ export default movingAverages
 
 export {
     sma,
+    ema,
     choosePrice
 }
