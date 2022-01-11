@@ -1,4 +1,4 @@
-import { ema, sma } from "../movingAverages"
+import { ema, sma } from "../Trends/movingAverages"
 
 
 const macd = (data, indicator) => {

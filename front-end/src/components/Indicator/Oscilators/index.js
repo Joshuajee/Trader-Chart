@@ -1,3 +1,4 @@
+import ATR from "./ATR";
 import MACD from "./MACD";
 import RSI from "./RSI";
 
@@ -14,6 +15,17 @@ const NewWindow = (props) => {
 
         indicators[symbol]?.map(item => {
 
+            
+            if (item.type === 'MACD') {
+
+                const points = findIndicator(data, item)
+
+                return <MACD data={data} width={width} windowHeight={windowHeight} 
+                            minX={minX} maxX={maxX} item={item} points={points}
+                            onDomainChange={onDomainChange} zoom={zoom} yTicks={yTicks} />
+
+            }
+
             if (item.type === 'RSI') {
 
                 const points = findIndicator(data, item)
@@ -25,16 +37,16 @@ const NewWindow = (props) => {
 
             }
 
-            if (item.type === 'MACD') {
+            if (item.type === 'ATR') {
 
                 const points = findIndicator(data, item)
 
-                return <MACD data={data} width={width} windowHeight={windowHeight} 
+                return <ATR data={data} width={width} windowHeight={windowHeight} 
                             minX={minX} maxX={maxX} item={item} points={points}
-                            onDomainChange={onDomainChange} 
+                            onDomainChange={onDomainChange} rsiAxis={rsiAxis} 
                             noOfWindows={noOfWindows} zoom={zoom} yTicks={yTicks} />
 
-                }
+            }
 
             return <></>
 

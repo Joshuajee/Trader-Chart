@@ -25,13 +25,20 @@
 
 .modal .container {
     position: relative;
-    top: 1em;
+    top: 0.1em;
     left: 10%;
     width: 80%;
 }
 
 .modal .container .parameter {
-    margin: 1em;
+    margin: 0.1em;
+    display: inline-block;
+    width: 100%;
+}
+
+.modal .container .parameter .color-picker{
+    width: 20%;
+    display: inline-flex;
 }
 
 
@@ -65,14 +72,25 @@
     
     .modal .container {
         position: relative;
-        top: 1em;
+        top: 0.1em;
         left: 10%;
         width: 80%;
     }
     
     .modal .container .parameter {
-        margin: 1em;
+        margin: 0.1em;
+        
     }
+
+    .modal .container .parameter input{
+       width: 20%;
+    }
+
+    .modal .container .parameter input .color-picker{
+        width: 20%;
+        display: inline-block;
+     }
+ 
     
     
 

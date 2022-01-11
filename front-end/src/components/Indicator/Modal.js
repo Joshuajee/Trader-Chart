@@ -9,6 +9,9 @@ import RSI from "./Modal/Oscilators/RSI";
 import ShowIndicators from "./ShowIndicators";
 import { getName } from "./logics/general";
 import MACD from "./Modal/Oscilators/MACD";
+import ParabolicSar from "./Modal/Trend/ParabolicSar";
+import Ichimoku from "./Modal/Trend/Ichimoku";
+import ATR from "./Modal/Oscilators/ATR";
 
 
 const mapStateToProps = state => {
@@ -88,9 +91,47 @@ const Modal = (props) => {
                     />
             }
 
+
+            { indicator === "PAR" &&
+                <ParabolicSar
+                    addIndicator={addIndicator}
+                    indicators={indicators}
+                    setModal={setModal}
+                    symbol={symbol}
+                    update={update}
+                    deleteIndicator={deleteIndicator}
+                    updateIndicator={updateIndicator}
+                    />
+            }
+
+            { indicator === "ICK" &&
+                <Ichimoku
+                    addIndicator={addIndicator}
+                    indicators={indicators}
+                    setModal={setModal}
+                    symbol={symbol}
+                    update={update}
+                    deleteIndicator={deleteIndicator}
+                    updateIndicator={updateIndicator}
+                    />
+            }
+
             {
                 indicator === "RSI" &&
                     <RSI 
+                        addIndicator={addIndicator}
+                        indicators={indicators}
+                        setModal={setModal}
+                        symbol={symbol}
+                        update={update}
+                        deleteIndicator={deleteIndicator}
+                        updateIndicator={updateIndicator}
+                        />
+            }
+
+            {
+                indicator === "ATR" &&
+                    <ATR 
                         addIndicator={addIndicator}
                         indicators={indicators}
                         setModal={setModal}

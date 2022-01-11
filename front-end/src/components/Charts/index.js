@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useState, useEffect } from "react";
 import { connect } from 'react-redux';
-import { VictoryChart, VictoryZoomContainer, VictoryAxis,
+import { VictoryChart, VictoryZoomContainer, VictoryAxis, VictoryArea,
 	VictoryCandlestick, VictoryLine, VictoryTooltip, VictoryLegend } from "victory";
 import ToolBar from "./ToolBar";
 import { updateAssets, addIndicator, updateIndicator  } from './../../redux/actions';
@@ -178,7 +178,7 @@ const Chart = (props) => {
 
 	useEffect(() => {
 
-		const list = { RSI: '' }
+		const list = { RSI: '', ATR: '', MACD: '' }
 
 		let count = 0
 
@@ -321,6 +321,73 @@ const Chart = (props) => {
 											key={item.id}
 											/>
 									</VictoryGroup>
+									)
+
+								} else 	if (item.type === 'PAR') {
+
+									const points = findIndicator(data, item)
+
+								} else if (item.type === 'ICK') {
+
+									const points = findIndicator(data, item)
+
+									console.log(points)
+
+									return (
+										<VictoryGroup key={item.id}>
+
+											<VictoryArea 
+												style={{ data: { fill: "#c43a31", opacity: 0.5 } }}
+												data={points.CLOUD} x='x' y='lsA' y0='lsB'
+												 />
+
+											<VictoryLine 
+												style={{
+													data: { stroke: item.color },
+													parent: { border: item.lineWidth}
+												}}
+												data={points.CL}
+												x='x'
+												y='y'	
+												/>
+											<VictoryLine 
+												style={{
+													data: { stroke: item.color },
+													parent: { border: item.lineWidth}
+												}}
+												data={points.BL}
+												x='x'
+												y='y'	
+												/>
+											<VictoryLine 
+												style={{
+													data: { stroke: item.color },
+													parent: { border: item.lineWidth}
+												}}
+												data={points.LSA}
+												x='x'
+												y='y'	
+												/>
+											<VictoryLine 
+												style={{
+													data: { stroke: item.color },
+													parent: { border: item.lineWidth}
+												}}
+												data={points.LSB}
+												x='x'
+												y='y'	
+												/>
+											<VictoryLine 
+												style={{
+													data: { stroke: item.color },
+													parent: { border: item.lineWidth}
+												}}
+												data={points.LAG}
+												x='x'
+												y='y'	
+												/>
+
+										</VictoryGroup>
 									)
 
 								}

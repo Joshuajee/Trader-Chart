@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { NavLink } from "react-router-dom"
 
 const SideNavLink = (props) => {
 
@@ -16,7 +17,7 @@ const SideNavLink = (props) => {
                 
                     { data.map(item =>{
 
-                        return <div className="link"> {item} </div>
+                        return <NavLink className="link"> {item}  </NavLink> 
                     } ) } </div>
             }
     

@@ -5,34 +5,27 @@ import { xAxisStyles, xAxisTicks } from "../../Charts/logics/xAxis";
 
 const MACD = (props) => {
 
-    const { points, windowHeight, minX, maxX, item,
-        onDomainChange, noOfWindows, width, zoom
+    const { data, width, windowHeight, minX, maxX, item, points,
+        onDomainChange, noOfWindows, zoom
     } = props
 
-    const [maxHigh, setMaxHigh] = useState(100)
-	const [minLow, setMinLow] = useState(0)
+
+    const [maxHigh, setMaxHigh] = useState(0.0000001)
+	const [minLow, setMinLow] = useState(-0.0000001)
     const [high, setHigh] = useState(null)
 	const [low, setLow] = useState(null)
-    const [data, setData] = useState([])
     const [yTicks, setYTicks] = useState([])
-
  
     useEffect(() => {
 
-		if(points) {
-			setData(points?.map(item => item.macdLine))
-		}
+        const yRange = points.slice(minX, maxX)
 
-	}, [points])
+        const value = yRange.map(element => element.macdLine )
 
-    useEffect(() => {
+		setHigh(Math.max(...value))
+		setLow(Math.min(...value))
 
-        const yRange = data.slice(minX, maxX)
-
-		setHigh(Math.max(...yRange))
-		setLow(Math.min(...yRange))
-
-    }, [data, minX, maxX])
+    }, [points, minX, maxX])
 
     useEffect(() => {
 
@@ -46,7 +39,7 @@ const MACD = (props) => {
             let array = []
 
             for (let i = min; i < max; i += interval) {
-                array.push(Number(i.toFixed(9)))
+                array.push(Number(i.toFixed(8)))
             }
 
             setYTicks(array)
@@ -58,12 +51,17 @@ const MACD = (props) => {
 
         const margin = high - low
 
-        setMaxHigh(high - (margin * 0.06))
+        setMaxHigh(high + (margin * 0.06))
         setMinLow(low - (margin * 0.06))
 
     }, [high, low])
 
-    console.log(points)
+
+    console.log(maxHigh)
+    console.log(minLow)
+    console.log(yTicks)
+
+
 
     return (
         <VictoryChart
@@ -74,7 +72,7 @@ const MACD = (props) => {
             padding={{right: 60, bottom: 30, left: 0 }}
             containerComponent={
                 <VictoryZoomContainer 
-                    zoomDomain={{ x: [minX, maxX], y: [minLow, maxHigh] 
+                    zoomDomain={{ x: [minX, maxX], y: [minLow, maxHigh]
                     }}
                     onZoomDomainChange={onDomainChange}
                     />
@@ -82,7 +80,6 @@ const MACD = (props) => {
             scale={{x: "time"}}
             key={item.id}>
 
-                
             <VictoryAxis 
                 dependentAxis 
                 orientation="right" 
@@ -106,12 +103,11 @@ const MACD = (props) => {
                 />
 
             <VictoryAxis
-                tickValues={points?.x}
+                tickValues={data?.x}
                 style={xAxisStyles(maxX - minX)}
                 tickFormat={(t, i) => xAxisTicks(t, i, noOfWindows, width, zoom)}
                 />
- 
-
+    
               <VictoryBar
                 style={{
                 points: {
@@ -123,7 +119,7 @@ const MACD = (props) => {
                 x='x'
                 y='macdHist'
             />
-    
+
             <VictoryLine 
                 style={{
                     points: { stroke: item.color },

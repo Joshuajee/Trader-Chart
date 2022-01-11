@@ -1,4 +1,4 @@
-import { choosePrice } from "../movingAverages"
+import { choosePrice } from "../Trends/movingAverages"
 
 
 const rsi = (data, indicator) => {
