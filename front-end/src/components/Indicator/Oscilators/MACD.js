@@ -11,91 +11,78 @@ const MACD = (props) => {
 
     const [maxHigh, setMaxHigh] = useState(100)
 	const [minLow, setMinLow] = useState(0)
-    const [high, setHigh] = useState([])
-	const [low, setLow] = useState([])
+    const [high, setHigh] = useState(null)
+	const [low, setLow] = useState(null)
+    const [data, setData] = useState([])
     const [yTicks, setYTicks] = useState([])
 
+ 
     useEffect(() => {
 
 		if(points) {
-			setHigh(points?.map(item => item.macdLine))
-			setLow(points?.map(item => item.macdLine))
+			setData(points?.map(item => item.macdLine))
 		}
 
 	}, [points])
 
-	useEffect(() => {
+    useEffect(() => {
 
-		const max = maxHigh;
-		const min = minLow;
+        const yRange = data.slice(minX, maxX)
 
-		const interval = 10 ** -5;
+		setHigh(Math.max(...yRange))
+		setLow(Math.min(...yRange))
 
-		let array = []
-
-		for (let i = min; i < max; i += interval) {
-			array.push(Number(i.toFixed(9)))
-		}
-
-		setYTicks(array)
-
-	}, [maxHigh, minLow])
-
+    }, [data, minX, maxX])
 
     useEffect(() => {
 
-		const highRange = high.slice(minX, maxX)
-		const lowRange = low.slice(minX, maxX)
+        if (high && low) {
 
-		const max = Math.max(...highRange)
-		const min = Math.min(...lowRange)
-		const margin = max - min
+            const max = high;
+            const min = low;
 
-		setMaxHigh(max + (margin * 0.06))
-		setMinLow(min - (margin * 0.06))
+            const interval = 10 ** -5;
 
-	}, [minX, maxX, high, low])
+            let array = []
 
+            for (let i = min; i < max; i += interval) {
+                array.push(Number(i.toFixed(9)))
+            }
 
-    console.log(yTicks)
+            setYTicks(array)
+        }
+
+	}, [high, low])
+
+    useEffect(() => {
+
+        const margin = high - low
+
+        setMaxHigh(high - (margin * 0.06))
+        setMinLow(low - (margin * 0.06))
+
+    }, [high, low])
+
+    console.log(points)
 
     return (
         <VictoryChart
             width={width}
             height={windowHeight}
-            domain={{ x: [minX, maxX], y: [minLow, maxHigh]}}
+            domain={{ x: [minX, maxX], y: [minLow, maxHigh]
+            }}
             padding={{right: 60, bottom: 30, left: 0 }}
             containerComponent={
                 <VictoryZoomContainer 
-                    zoomDomain={{ x: [minX, maxX], y: [minLow, maxHigh] }}
+                    zoomDomain={{ x: [minX, maxX], y: [minLow, maxHigh] 
+                    }}
                     onZoomDomainChange={onDomainChange}
                     />
                 }
             scale={{x: "time"}}
             key={item.id}>
-{/*}
-              <VictoryBar
-                style={{
-                points: {
-                    fill: "#c43a31",
-                    width: 4
-                }
-                }}
-                points={points}
-                x='x'
-                y='macdHist'
-            />
-            {*/}
-            <VictoryLine 
-                style={{
-                    points: { stroke: item.color },
-                    parent: { border: item.lineWidth}
-                }}
-                points={points}
-                x='x'
-                y='macdLine'	
-                />
 
+                
             <VictoryAxis 
                 dependentAxis 
                 orientation="right" 
@@ -120,10 +107,33 @@ const MACD = (props) => {
 
             <VictoryAxis
                 tickValues={points?.x}
-                //style={xAxisStyles(maxX - minX)}
+                style={xAxisStyles(maxX - minX)}
                 tickFormat={(t, i) => xAxisTicks(t, i, noOfWindows, width, zoom)}
                 />
  
+
+              <VictoryBar
+                style={{
+                points: {
+                    fill: "#c43a31",
+                    width: 4
+                }
+                }}
+                points={points}
+                x='x'
+                y='macdHist'
+            />
+    
+            <VictoryLine 
+                style={{
+                    points: { stroke: item.color },
+                    parent: { border: item.lineWidth}
+                }}
+                points={points}
+                x='x'
+                y='macdLine'	
+                />
+
         </VictoryChart>
         )
 }

@@ -10,6 +10,7 @@ import ShowIndicators from "./ShowIndicators";
 import { getName } from "./logics/general";
 import MACD from "./Modal/Oscilators/MACD";
 
+
 const mapStateToProps = state => {
     return { 
 	  indicator: state.indicator

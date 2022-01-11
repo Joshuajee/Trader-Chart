@@ -1,6 +1,7 @@
 import { IoIosClose } from 'react-icons/io';
 import { connect } from 'react-redux';
 import { showSideNav  } from './../../redux/actions';
+import SideNavLink from './SideNavLink';
 
 
 const mapStateToProps = state => {
@@ -36,9 +37,11 @@ const SideNav = (props) => {
 
             <div className='navs'>
 
-                <div className="link">Forex</div>
-                <div className="link">Crypto</div>
-                <div className="link">Stocks</div>
+                <SideNavLink text={'Forex'} data = {[ 'EURUSD', 'AUDCAD'] } />
+        
+                <SideNavLink text={'Crypto'} data = {[ 'EURUSD'] } />
+
+                <SideNavLink text={'Metals'} data = {[ 'EURUSD'] } />
 
             </div>
 

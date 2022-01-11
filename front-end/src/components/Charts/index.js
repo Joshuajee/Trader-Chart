@@ -46,7 +46,9 @@ const Chart = (props) => {
 
 	const { updateAssets, assets, indicators } = props;
 
-	const [width, ] = useState(window.screen.width * 0.94)
+	console.log(window.innerHeight)
+
+	const [width, ] = useState(window.innerWidth * 0.94)
 	const [heightPadder, ] = useState(0.76)
 	const [data, setData] = useState(null)
 	const [start, setStart] = useState(0)
@@ -64,7 +66,7 @@ const Chart = (props) => {
 	const [high, setHigh] = useState([])
 	const [low, setLow] = useState([])
 	const [loading, setLoading] = useState(false)
-	const [initialHeight, ] = useState(window.screen.height * heightPadder);
+	const [initialHeight, ] = useState(window.innerHeight * heightPadder);
 	const [height, setHeight] = useState(initialHeight)
 	const [windowHeight, setWindowHeight] = useState(0)
 	const [noOfWindows, setNoOfWindows] = useState(0)
@@ -74,7 +76,7 @@ const Chart = (props) => {
 
 	useEffect(() => {
 
-		setHeight(window.screen.height * heightPadder)
+		setHeight(window.innerHeight * heightPadder)
 
 	}, [heightPadder])
 
@@ -184,7 +186,7 @@ const Chart = (props) => {
 
 			if (element.type in list) {
 				count++
-				setHeight(window.screen.height * heightPadder * 0.7 ** count)
+				setHeight(window.innerHeight * heightPadder * 0.7 ** count)
 			}
 
 		});
@@ -230,15 +232,21 @@ const Chart = (props) => {
 					  }}
 					>
 
-
-					<VictoryLegend x={12} y={10}
-						title={`${symbol}: ${tf}`}
-						centerTitle
-						orientation="horizontal"
-						gutter={20}
-						style={ {title: {fontSize: 20 } }}
-						data={[]}
+					<VictoryAxis
+						tickValues={data?.x}
+						style={xAxisStyles(maxX - minX)}
+						tickFormat={(t, i) => xAxisTicks(t, i, noOfWindows, width, zoom)}
 						/>
+		
+					<VictoryAxis 
+						dependentAxis 
+						orientation="right"  
+						tickValues={yTicks}
+						tickFormat={(t, i) => yAxisTicks(i, t, yTicks)}
+						style={yAxisStyles(yTicks)}
+						/>
+
+
 
 					{data && 
 						<VictoryCandlestick
@@ -322,22 +330,14 @@ const Chart = (props) => {
 
 					}
 
-				
-					<VictoryAxis
-						tickValues={data?.x}
-						style={xAxisStyles(maxX - minX)}
-						tickFormat={(t, i) => xAxisTicks(t, i, noOfWindows, width, zoom)}
-					/>
-		
-					<VictoryAxis 
-						dependentAxis 
-						orientation="right"  
-						tickValues={yTicks}
-						tickFormat={(t, i) => yAxisTicks(i, t, yTicks)}
-						style={yAxisStyles(yTicks)}
-					/>
-
-
+					<VictoryLegend x={12} y={10}
+						title={`${symbol}: ${tf}`}
+						centerTitle
+						orientation="horizontal"
+						gutter={20}
+						style={ {title: {fontSize: 20 } }}
+						data={[]}
+						/>
 
 				</VictoryChart>
 

@@ -3,3 +3,11 @@ node_modules
 /server/.env
 /server/node_modules
 /.env
+
+/sampleData/Forex/AUDUSD.json
+/sampleData/Forex/GBPUSD.json
+
+/sampleData/Crypto/BTCUSD.json
+/sampleData/Crypto/AUDUSD.json
+
+/sampleData/Metals/AUDUSD.json

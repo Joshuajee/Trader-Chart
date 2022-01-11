@@ -1,11 +1,5 @@
 <div id="top"></div>
 
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-
-
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
@@ -67,7 +61,6 @@ This App is a web based trading charting platform where you can carry out techni
 
 ### Built With
 
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
 
 * [React.js](https://reactjs.org/)
 * [Mongodb](https://www.mongodb.com/)
@@ -83,8 +76,6 @@ This section should list any major frameworks/libraries used to bootstrap your p
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
@@ -99,6 +90,9 @@ _Below is an example of how you can instruct your audience on installing and set
 
 1. Create A time Series collection in Mongodb [Click Here](https://docs.mongodb.com/manual/core/timeseries-collections/)
     a time series collection can only be created in a Dedicated cluster, the cluster need to be version 5.0.
+    1. The collection name should be assets
+    2. Set the timeField to be timeseries
+    3. It should have a Metafield of symbol, category and source.
 2. Clone the repo
    ```sh
    git clone https://github.com/Joshuajee/Trader-Chart.git
@@ -115,7 +109,12 @@ _Below is an example of how you can instruct your audience on installing and set
    ```js
    DATABASE = 'ENTER YOUR MONGODB URI'
    ```
+6. Follow the steps below to populate your Collections with data:
+    Note these data were gotten from MT5 as csv file then in was converted to Json format
 
+    1. ```sh
+        node upload.js
+    ```
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
