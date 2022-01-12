@@ -8,6 +8,9 @@ const assetSchema = new mongoose.Schema(
         symbol: {
             type: String
         },
+        category: {
+            type: String
+        },
         source: {
             type: String
         },

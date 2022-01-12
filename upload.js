@@ -13,30 +13,66 @@ const DB = process.env.DATABASE;
 const inc = 500
 
 
-const upload = async (start, finish, asset, symbol) => {
-    console.log(start)
-    const data = asset.slice(start, finish).map(item => {
-        return {
-          timestamp: new Date(item.date + " " + item.time),
-          symbol: symbol,
-          values: { open: item.open, high: item.high, low: item.low, close: item.close, tickvol: item.tickvol, vol: item.vol, spread: item.spread }
-        }
-    })
+const upload = async (start, finish, max, asset, category, symbol) => {
 
-    try {
-        await Assets.insertMany(data).then(data => {}, err => {});
+  const data = asset.slice(start, finish).map(item => {
+      return {
+        timestamp: new Date(item.date + " " + item.time),
+        symbol: symbol,
+        category: category,
+        source: 'metaquotes',
+        values: { open: item?.open, high: item?.high, low: item?.low, close: item?.close, tickvol: item?.tickvol, vol: item?.vol, spread: item?.spread }
+      }
+  })
 
-        console.log((finish/max) * 100)
+
+  let increase = 0;
+
+  try {
+      await Assets.insertMany([...data]).then(data => { 
         
-        await upload(start + inc, finish + inc <= max ? finish + inc: max, max, assets, symbol)
+        if (data) {
+          
+          increase = inc
 
-        //console.log(val)
-    } catch (err) {
-        //console.log(err)
+          console.clear()
+
+          console.log("Category ", category)
+          console.log("Asset ", symbol)
+          
+          console.log('Percentage: ', Number((finish/max).toFixed(10)) * 100, ' % ')
+        }
+
+    }, err => {
+      if (err) {
+          
+        console.clear()
+
+        console.log("Category ", category)
+        console.log("Asset ", symbol)
+
+        console.log('An error occured')
+
+        console.log(err?.message)
+
+        console.log('Reloading')
+        
+        console.log('Percentage: ', Number((finish/max)) * 100, ' % ')
+      }
+    });
+
+
+    if(finish >= max) {
+      console.log('upload complete')
+      process.exit(1)
     }
+      
+    await upload(start + increase, finish + increase <= max ? finish + increase: max, max, asset, category, symbol)
+
+  } catch (err) {
+      //console.log(err)
+  }
 }
-
-
 
 
 mongoose
@@ -54,17 +90,18 @@ mongoose
 
     console.log(asset)
 
+    const file = (path.join(__dirname, '/sampleData/', assetType.toLowerCase(), '/', asset.toUpperCase() +'.json'))
 
     try {
       const data = fs.readFileSync(file, 'utf8')
-      //console.log(data)
-      console.log(data.length)
+
+      const length = data.length;
+
+      upload(0, inc, length, JSON.parse(data), assetType.toLowerCase(), asset.toUpperCase())
+
     } catch (err) {
       console.error(err)
     }
-
-
-    //upload(0, 500, max, symbol)
 
   });
 

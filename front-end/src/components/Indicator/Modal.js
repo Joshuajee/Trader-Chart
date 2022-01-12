@@ -61,7 +61,9 @@ const Modal = (props) => {
     return (
         <div className="modal">
 
-            <div className="title"> {title}  <span className="close" onClick={() => setModal(false)}> <IoIosClose size={40}/> </span> </div>
+            <div className="close" onClick={() => setModal(false)}> <IoIosClose onClick={() => setModal(false)} size={40}/> </div>
+
+            <div className="title"> {title}   </div>
 
             { indicator === 'update' && <ShowIndicators setUpdate={setUpdate} indicator={indicator} chooseIndicator={chooseIndicator} indicators={indicators} symbol={symbol} />}
 

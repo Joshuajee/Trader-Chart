@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { VictoryChart, VictoryZoomContainer, VictoryAxis, VictoryLine,  } from "victory";
+import { VictoryChart, VictoryZoomContainer, VictoryAxis, VictoryLine, VictoryLegend } from "victory";
 import { xAxisStyles, xAxisTicks } from "../../Charts/logics/xAxis";
 
 
@@ -8,8 +8,6 @@ const ATR = (props) => {
     const { data, width, windowHeight, minX, maxX, item, points,
         onDomainChange, noOfWindows, zoom
     } = props
-
-    console.log(windowHeight)
     
     const [maxHigh, setMaxHigh] = useState(0.0000001)
 	const [minLow, setMinLow] = useState(-0.0000001)
@@ -71,7 +69,7 @@ const ATR = (props) => {
             padding={{right: 60, bottom: 30, left: 0 }}
             containerComponent={
                 <VictoryZoomContainer 
-                    zoomDomain={{ x: [minX, maxX],// y: [0, 100]
+                    zoomDomain={{ x: [minX, maxX], y: [minLow, maxHigh]
                     }}
                     onZoomDomainChange={onDomainChange}
                     />}
@@ -119,6 +117,16 @@ const ATR = (props) => {
                 style={xAxisStyles(maxX - minX)}
                 tickFormat={(t, i) => xAxisTicks(t, i, noOfWindows, width, zoom)}
             />
+
+           <VictoryLegend x={12} y={10}
+						title={`ATR(${item.period}) ${points[points.length - 1].atr}`}
+						centerTitle
+						orientation="horizontal"
+						gutter={20}
+						style={ {title: {fontSize: 10 } }}
+						data={[]}
+						/>
+
 
 
         </VictoryChart>

@@ -1,4 +1,4 @@
-import { VictoryChart, VictoryZoomContainer, VictoryAxis, VictoryLine,  } from "victory";
+import { VictoryChart, VictoryZoomContainer, VictoryAxis, VictoryLine, VictoryLegend  } from "victory";
 import { xAxisStyles, xAxisTicks } from "../../Charts/logics/xAxis";
 
 
@@ -68,6 +68,15 @@ const RSI = (props) => {
                 style={xAxisStyles(maxX - minX)}
                 tickFormat={(t, i) => xAxisTicks(t, i, noOfWindows, width, zoom)}
             />
+
+            <VictoryLegend x={12} y={10}
+						title={`RSI(${item.period}) ${points[points.length - 1].y}`}
+						centerTitle
+						orientation="horizontal"
+						gutter={20}
+						style={ {title: {fontSize: 10 } }}
+						data={[]}
+						/>
 
 
         </VictoryChart>

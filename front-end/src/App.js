@@ -15,8 +15,10 @@ function App () {
           <TopNav />
 
           <Chart />
-          
 
+        {/*}  <Route path='/' component={() => <Chart />} />
+          
+    {*/}
           <SideNav />
         </BrowserRouter>
       </Provider>

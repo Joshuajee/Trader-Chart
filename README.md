@@ -115,6 +115,30 @@ _Below is an example of how you can instruct your audience on installing and set
     1. ```sh
         node upload.js
     ```
+    you be prompt type `forex` for asset type and `eurusd` for asset this is case insensitive.
+
+    ![Prompt](./images/prompt-upload.png "App screenshot")
+
+    uploading.
+
+    ![Prompt](./images/uploading.png "App screenshot")
+
+    completed.
+    
+    ![Prompt](./images/completed.png "App screenshot")
+
+    Note: 
+    The file you are uploading should be in this directory `sampleData` the asset type should also be a directory, you should do this once per asset, Donot repeat this process.
+
+    ![Prompt](./images/files.png "App screenshot")
+
+    2. The data used in this app are gotten from Metatrader 5, if you want more assets download the app, export the symbol you want as csv convert into to json [https://csvjson.com/](https://csvjson.com) or with any other csv to json converter you know. 
+    Then replace `<DATE>, <TIME>, <OPEN>, <HIGH>, <LOW>, <CLOSE>, <TICKVO>, <VOL>, <SPREAD>` with
+    date, time, open, high, low, close, tickvol, vol, spread respectively using `ctrl h` and replace all on your text editor.
+
+    3. if you want new `assetType` please create a new directory in the sample data directory and put the json file you want to upload, the asset name must be the asset symbole
+
+
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
@@ -122,7 +146,10 @@ _Below is an example of how you can instruct your audience on installing and set
 <!-- USAGE EXAMPLES -->
 ## PREVIEW
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+  ![Preview](./images/indicators.png "App screenshot")
+
+  ![Preview](./images/marsi.png "App screenshot")
+
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
