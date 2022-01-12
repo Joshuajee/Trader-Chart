@@ -1,3 +1,10 @@
+a:-webkit-any-link {
+    color: inherit;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+}
+
 .nav {
     position: fixed;
     top: 0px;
@@ -63,6 +70,7 @@
 
 .sidenav .navs .nav-link .link .sub .link{
     height: 24px;
+    color: white;
 }
 
 .tool-bar {

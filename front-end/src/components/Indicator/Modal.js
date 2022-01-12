@@ -34,8 +34,6 @@ const Modal = (props) => {
 
     const { setModal, addIndicator, updateIndicator, deleteIndicator, indicators, symbol } = props
 
-    console.log(' ------- ', indicators)
-
     const [title, setTitle] = useState("Indicators")
     const [indicator, chooseIndicator] = useState(null)
     const [update, setUpdate] = useState(null)

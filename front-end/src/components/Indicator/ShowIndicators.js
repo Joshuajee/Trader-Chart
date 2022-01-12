@@ -18,13 +18,15 @@ const ShowIndicators = (props) => {
             case 'BB':
                 return 'Bollinger Band'
             case 'ICK':
-                return 'Ichimoku '
+                return 'Ichimoku'
             case 'PAR':
                 return 'Parabolic Sar'
             case 'MACD':
                 return 'Moving Average Convergence Divergence'
             case 'RSI':
                 return 'Relative Strength Index'
+            case 'ATR':
+                return 'Average True Range'
             default:
                 return ''
         }
@@ -37,7 +39,6 @@ const ShowIndicators = (props) => {
 
                 <ul>
                     {indicators[symbol].map(indicator => {
-                        console.log(indicator)
                         return <li onClick={() => setUpdate(indicator)}> {getName(indicator.type)} </li>
                     })}
                 </ul>

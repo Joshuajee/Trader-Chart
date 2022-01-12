@@ -6,16 +6,30 @@ exports.getAssets = catchAsync(async (req, res, next) => {
     console.log(req.params)
 
     
-    const assets = await Asset.find({symbol: asset})
+    const assets = await Asset.find({'metadata.symbol': asset})
                     .skip(Number(start)).limit(Number(count)).sort({timestamp: -1});
 
-    const counts = await Asset.countDocuments({symbol: asset});
+    const counts = await Asset.countDocuments({'metadata.symbol': asset});
 
 
     res.json({
         status: 'success',
         data: assets.reverse(),
         count: counts
+        })
+});
+
+
+exports.getCategory = catchAsync(async (req, res, next) => {
+
+    const category = await Asset.distinct('metadata')
+
+
+
+    res.json({
+        status: 'success',
+        data: category,
+
         })
 });
 

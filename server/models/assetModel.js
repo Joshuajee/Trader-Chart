@@ -5,14 +5,8 @@ const assetSchema = new mongoose.Schema(
         timestamp: {
             type: Date
         },
-        symbol: {
-            type: String
-        },
-        category: {
-            type: String
-        },
-        source: {
-            type: String
+        metadata: {
+            type: Object
         },
         values: {
             type: Object
@@ -21,3 +15,4 @@ const assetSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model('assets', assetSchema);
+

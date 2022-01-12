@@ -1,12 +1,13 @@
 import assetReducer from './assets';
-import { SIDENAV, ASSETS, INDICATORS, UPDATE_INDICATOR } from "../constants/action-types";
+import { SIDENAV, ASSETS, INDICATORS, UPDATE_INDICATOR, NAVS } from "../constants/action-types";
 import indicatorReducer, { updateIndicator } from './indicator';
 
 
 const initialState = {
-    indicators: { },
+    indicators: {},
     sideNav: false,
-    assets: {}
+    assets: {},
+    navs: []
 };
   
 function rootReducer(state = initialState, action) {
@@ -16,6 +17,8 @@ function rootReducer(state = initialState, action) {
     const payload = action.payload
 
     switch (action.type) {
+        case NAVS:
+            return { ...state, navs: payload }
         case SIDENAV:
             return { ...state, sideNav: payload }
         case ASSETS:

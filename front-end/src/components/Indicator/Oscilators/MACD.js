@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { VictoryChart, VictoryZoomContainer, VictoryAxis, VictoryLine, VictoryBar  } from "victory";
+import { VictoryChart, VictoryZoomContainer, VictoryAxis, VictoryLine, VictoryBar, VictoryLegend  } from "victory";
 import { xAxisStyles, xAxisTicks } from "../../Charts/logics/xAxis";
 
 
@@ -8,7 +8,6 @@ const MACD = (props) => {
     const { data, width, windowHeight, minX, maxX, item, points,
         onDomainChange, noOfWindows, zoom
     } = props
-
 
     const [maxHigh, setMaxHigh] = useState(0.0000001)
 	const [minLow, setMinLow] = useState(-0.0000001)
@@ -34,7 +33,7 @@ const MACD = (props) => {
             const max = high;
             const min = low;
 
-            const interval = 10 ** -5;
+            const interval = (max - min) / 100;
 
             let array = []
 
@@ -56,13 +55,7 @@ const MACD = (props) => {
 
     }, [high, low])
 
-
-    console.log(maxHigh)
-    console.log(minLow)
-    console.log(yTicks)
-
-
-
+     
     return (
         <VictoryChart
             width={width}
@@ -109,25 +102,35 @@ const MACD = (props) => {
                 />
     
               <VictoryBar
+                barRatio={2}
                 style={{
                 points: {
                     fill: "#c43a31",
-                    width: 4
+                    width: '20px'
                 }
                 }}
-                points={points}
+                data={points}
                 x='x'
                 y='macdHist'
             />
 
             <VictoryLine 
                 style={{
-                    points: { stroke: item.color },
+                    data: { stroke: item.color },
                     parent: { border: item.lineWidth}
                 }}
-                points={points}
+                data={points}
                 x='x'
                 y='macdLine'	
+                />
+
+            <VictoryLegend x={12} y={10}
+                title={`MACD (${item.fastEMA}, ${item.slowEMA}, ${item.macdSMA}) ${points[points.length - 1].macdLine} ${points[points.length - 1].macdHist}`}
+                centerTitle
+                orientation="horizontal"
+                gutter={20}
+                style={ {title: {fontSize: 10 } }}
+                data={[]}
                 />
 
         </VictoryChart>

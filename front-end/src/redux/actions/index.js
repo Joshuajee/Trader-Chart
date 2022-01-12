@@ -1,4 +1,9 @@
-import {ASSETS, INDICATORS, SIDENAV, UPDATE_INDICATOR } from "../constants/action-types";
+import { NAVS, ASSETS, INDICATORS, SIDENAV, UPDATE_INDICATOR } from "../constants/action-types";
+
+export function updateNavs(payload) {
+  console.log("update navs", payload)
+  return { type: NAVS, payload };
+}
 
 export function showSideNav(payload) {
   console.log("Show Side Navigator", payload)

@@ -1,3 +1,5 @@
+import { countDecimals } from "./functions"
+
 const zoomOut = (zoom, setZoom) => {
 
         if (zoom >= 2000)
@@ -51,7 +53,7 @@ const zoomController = (zoom, setToolState) => {
 }
 
 
-const domainController = (assets, symbol, zoom, count, start, setData, setMaxX, setMinX) => {
+const domainController = (assets, symbol, zoom, count, start, setData, setMaxX, setMinX, setPoints) => {
 
         if(assets[symbol] && start === 0) {
 
@@ -62,6 +64,8 @@ const domainController = (assets, symbol, zoom, count, start, setData, setMaxX, 
                 setMaxX(assets[symbol].data.length + zoomPadding)
 
                 setMinX(assets[symbol].data.length - (zoom + zoomPadding))
+
+                setPoints(countDecimals(assets[symbol].data[0]?.values?.high))
                 
         } else if(assets[symbol]) {
 

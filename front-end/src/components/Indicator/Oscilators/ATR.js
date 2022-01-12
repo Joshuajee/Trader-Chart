@@ -33,7 +33,7 @@ const ATR = (props) => {
             const max = high;
             const min = low;
 
-            const interval = 10 ** -5;
+            const interval = (max - min) / 100;
 
             let array = []
 
@@ -54,11 +54,6 @@ const ATR = (props) => {
         setMinLow(low - (margin * 0.06))
 
     }, [high, low])
-
-
-    console.log(maxHigh)
-    console.log(minLow)
-    console.log(yTicks)
 
     return (
         <VictoryChart
@@ -84,7 +79,6 @@ const ATR = (props) => {
                 data={points}
                 x='x'
                 y='atr'	
-                //key={item.id}
                 />
 
             <VictoryAxis 
@@ -119,15 +113,13 @@ const ATR = (props) => {
             />
 
            <VictoryLegend x={12} y={10}
-						title={`ATR(${item.period}) ${points[points.length - 1].atr}`}
-						centerTitle
-						orientation="horizontal"
-						gutter={20}
-						style={ {title: {fontSize: 10 } }}
-						data={[]}
-						/>
-
-
+                title={`ATR(${item.period}) ${points[points.length - 1].atr}`}
+                centerTitle
+                orientation="horizontal"
+                gutter={20}
+                style={ {title: {fontSize: 10 } }}
+                data={[]}
+                />
 
         </VictoryChart>
         )

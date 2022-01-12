@@ -18,9 +18,10 @@ const upload = async (start, finish, max, asset, category, symbol) => {
   const data = asset.slice(start, finish).map(item => {
       return {
         timestamp: new Date(item.date + " " + item.time),
-        symbol: symbol,
-        category: category,
-        source: 'metaquotes',
+//        symbol: symbol,
+//        category: category,
+//        source: 'metaquotes',
+        metadata: { source: 'metaquotes', category: category, symbol: symbol },
         values: { open: item?.open, high: item?.high, low: item?.low, close: item?.close, tickvol: item?.tickvol, vol: item?.vol, spread: item?.spread }
       }
   })

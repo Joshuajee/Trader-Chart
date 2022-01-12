@@ -55,10 +55,11 @@
         top: 8em;
         left: 4%;
         width: 84%;
-        height: 26em;
+        height: auto;
         background-color: white;
         border-radius: 1em;
         color: black;
+        padding: 0em 1em 4em 1em;
     }
     
     .modal .title {

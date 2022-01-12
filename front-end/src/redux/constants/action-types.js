@@ -1,3 +1,4 @@
+export const NAVS = "NAVS";
 export const SIDENAV = "SIDENAV";
 export const ASSETS = "ASSETS";
 export const INDICATORS = "INDICATORS";

@@ -13,6 +13,9 @@ import { VictoryGroup } from "victory";
 import { yAxisStyles, yAxisTicks } from "./logics/yAxis";
 import { labels } from "./logics/candleChart";
 import NewWindow from '../Indicator/Oscilators';
+import { useParams } from 'react-router';
+import Spinner from '../Loaders/Spinner';
+import Loader from '../Loaders/Loader';
 
 
 const mapStateToProps = state => {
@@ -46,10 +49,11 @@ const Chart = (props) => {
 
 	const { updateAssets, assets, indicators } = props;
 
-	console.log(window.innerHeight)
+	const params = useParams()
 
 	const [width, ] = useState(window.innerWidth * 0.94)
-	const [heightPadder, ] = useState(0.76)
+	const [points, setPoints] = useState(5)
+	const [heightPadder, ] = useState(0.88)
 	const [data, setData] = useState(null)
 	const [start, setStart] = useState(0)
 	const [count] = useState(500)
@@ -73,6 +77,11 @@ const Chart = (props) => {
 	const [yTicks, setYTicks] = useState([])
 	const [rsiAxis,] = useState([...Array(101).keys()])
 
+	useEffect(() => {
+
+		if (params.symbol) setSymbol(params.symbol)
+
+	}, [params.symbol])
 
 	useEffect(() => {
 
@@ -95,17 +104,17 @@ const Chart = (props) => {
 		const max = maxHigh;
 		const min = minLow;
 
-		const interval = 10 ** -5;
+		const interval = (max - min) / 100;
 
 		let array = []
 
 		for (let i = min; i < max; i += interval) {
-			array.push(Number(i.toFixed(5)))
+			array.push(Number(i.toFixed(points + 1)))
 		}
 
 		setYTicks(array)
 
-	}, [maxHigh, minLow])
+	}, [maxHigh, minLow, points])
 
 
 	useEffect(() => {
@@ -149,11 +158,11 @@ const Chart = (props) => {
 
 	}
 
-
-
 	useEffect(() => {
 
 		setLoading(true)
+
+		const controller = new AbortController();
 
 		axios.get(process.env.REACT_APP_API + `assets/${symbol}/${tf}/${start}/${count}`).then( res => {
 
@@ -165,16 +174,19 @@ const Chart = (props) => {
 
 			}
 
+
 			setLoading(false)
 
 		}, err => {
 
 			setLoading(false)
 		})
+
+		return () => controller.abort()
 		
 	}, [start, count, symbol, updateAssets, tf])
 
-	useEffect(() => domainController(assets, symbol, zoom, count, start, setData, setMaxX, setMinX), [assets, symbol, zoom, count])
+	useEffect(() => domainController(assets, symbol, zoom, count, start, setData, setMaxX, setMinX, setPoints), [assets, symbol, zoom, count])
 
 	useEffect(() => {
 
@@ -200,7 +212,6 @@ const Chart = (props) => {
 		setWindowHeight(Math.abs(initialHeight - height) / noOfWindows )
 
 	}, [initialHeight, height, noOfWindows])
-
 	
 	return (
 		<div>
@@ -214,199 +225,197 @@ const Chart = (props) => {
 
 			<div className="chart">
 
-				<VictoryChart
-					height={height}
-					width={width}
-					domain={{ x: [minX, maxX], y: [minLow, maxHigh]}}
-					containerComponent={
-						<VictoryZoomContainer 
-							zoomDomain={{ x: [minX, maxX], y: [minLow, maxHigh]}}
-							onZoomDomainChange={onDomainChange}
+				{assets[symbol] &&
+					<VictoryChart
+						height={height}
+						width={width}
+						domain={{ x: [minX, maxX], y: [minLow, maxHigh]}}
+						containerComponent={
+							<VictoryZoomContainer 
+								zoomDomain={{ x: [minX, maxX], y: [minLow, maxHigh]}}
+								onZoomDomainChange={onDomainChange}
+								/>
+							}
+						padding={{right: 64, bottom: 30, left: 0}}
+						domainPadding={{ x: 25 }}
+						scale={{ x: "time" }}
+						>
+
+						<VictoryAxis
+							tickValues={data?.x}
+							style={xAxisStyles(maxX - minX)}
+							tickFormat={(t, i) => xAxisTicks(t, i, noOfWindows, width, zoom)}
 							/>
+			
+						<VictoryAxis 
+							dependentAxis 
+							orientation="right"  
+							tickValues={yTicks}
+							tickFormat={(t, i) => yAxisTicks(i, t, yTicks)}
+							style={yAxisStyles(yTicks)}
+							/>
+
+
+
+						{data && 
+							<VictoryCandlestick
+								data={data} 
+								x='timestamp' 
+								open={['values', 'open']} high={['values', 'high']}
+								low={['values', 'low']} close={['values', 'close']}
+								candleColors={{ positive: "green", negative: "red" }}
+								candleRatio={candleRatio}
+								labelComponent={<VictoryTooltip dy={0} />}
+								labels={({ datum }) => labels(datum)}
+								/>
+
 						}
-					padding={{right: 64, bottom: 30, left: 0}}
-				    domainPadding={{ x: 25 }}
-					scale={{ x: "time" }}
-					events={{
-						onClick: (evt) => alert(`(${evt.clientX}, ${evt.clientY})`)
-					  }}
-					>
-
-					<VictoryAxis
-						tickValues={data?.x}
-						style={xAxisStyles(maxX - minX)}
-						tickFormat={(t, i) => xAxisTicks(t, i, noOfWindows, width, zoom)}
-						/>
-		
-					<VictoryAxis 
-						dependentAxis 
-						orientation="right"  
-						tickValues={yTicks}
-						tickFormat={(t, i) => yAxisTicks(i, t, yTicks)}
-						style={yAxisStyles(yTicks)}
-						/>
 
 
+						{
 
-					{data && 
-						<VictoryCandlestick
-							data={data} 
-							x='timestamp' 
-							open={['values', 'open']} high={['values', 'high']}
-							low={['values', 'low']} close={['values', 'close']}
-							candleColors={{ positive: "green", negative: "red" }}
-							candleRatio={candleRatio}
-							labelComponent={<VictoryTooltip dy={0} />}
-							labels={({ datum }) => labels(datum)}
-							/>
+							indicators[symbol]?.map(item => {
 
-					}
-
-
-					{
-
-						indicators[symbol]?.map(item => {
-
-							if (item.type === 'MA') {
-
-								const points = findIndicator(data, item)
-
-								return <VictoryLine 
-										style={{
-											data: { stroke: item.color },
-											parent: { border: item.lineWidth }
-										}}
-										data={points}
-										x='x'
-										y='y'	
-										key={item.id}
-										/>
-									}
-
-
-							if (item.type === 'BB') {
-
-								const points = findIndicator(data, item)
-
-								return (
-									<VictoryGroup key={item.id}>
-										<VictoryLine 
-											style={{
-												data: { stroke: item.color },
-												parent: { border: item.lineWidth}
-											}}
-											data={points}
-											x='x'
-											y='ub'	
-											key={item.id}
-											/>
-										<VictoryLine 
-											style={{
-												data: { stroke: item.color },
-												parent: { border: item.lineWidth}
-											}}
-											data={points}
-											x='x'
-											y='ma'	
-											key={item.id}
-											/>
-										<VictoryLine 
-											style={{
-												data: { stroke: item.color },
-												parent: { border: item.lineWidth}
-											}}
-											data={points}
-											x='x'
-											y='lb'	
-											key={item.id}
-											/>
-									</VictoryGroup>
-									)
-
-								} else 	if (item.type === 'PAR') {
+								if (item.type === 'MA') {
 
 									const points = findIndicator(data, item)
 
-								} else if (item.type === 'ICK') {
+									return <VictoryLine 
+											style={{
+												data: { stroke: item.color },
+												parent: { border: item.lineWidth }
+											}}
+											data={points}
+											x='x'
+											y='y'	
+											key={item.id}
+											/>
+										}
+
+
+								if (item.type === 'BB') {
 
 									const points = findIndicator(data, item)
-
-									console.log(points)
 
 									return (
 										<VictoryGroup key={item.id}>
-
-											<VictoryArea 
-												style={{ data: { fill: "#c43a31", opacity: 0.5 } }}
-												data={points.CLOUD} x='x' y='lsA' y0='lsB'
-												 />
-
 											<VictoryLine 
 												style={{
 													data: { stroke: item.color },
 													parent: { border: item.lineWidth}
 												}}
-												data={points.CL}
+												data={points}
 												x='x'
-												y='y'	
+												y='ub'	
+												key={item.id}
 												/>
 											<VictoryLine 
 												style={{
 													data: { stroke: item.color },
 													parent: { border: item.lineWidth}
 												}}
-												data={points.BL}
+												data={points}
 												x='x'
-												y='y'	
+												y='ma'	
+												key={item.id}
 												/>
 											<VictoryLine 
 												style={{
 													data: { stroke: item.color },
 													parent: { border: item.lineWidth}
 												}}
-												data={points.LSA}
+												data={points}
 												x='x'
-												y='y'	
+												y='lb'	
+												key={item.id}
 												/>
-											<VictoryLine 
-												style={{
-													data: { stroke: item.color },
-													parent: { border: item.lineWidth}
-												}}
-												data={points.LSB}
-												x='x'
-												y='y'	
-												/>
-											<VictoryLine 
-												style={{
-													data: { stroke: item.color },
-													parent: { border: item.lineWidth}
-												}}
-												data={points.LAG}
-												x='x'
-												y='y'	
-												/>
-
 										</VictoryGroup>
-									)
+										)
 
-								}
+									} else 	if (item.type === 'PAR') {
 
-							return null
-						})
+										const points = findIndicator(data, item)
 
-					}
+									} else if (item.type === 'ICK') {
 
-					<VictoryLegend x={12} y={10}
-						title={`${symbol}: ${tf}`}
-						centerTitle
-						orientation="horizontal"
-						gutter={20}
-						style={ {title: {fontSize: 20 } }}
-						data={[]}
-						/>
+										const points = findIndicator(data, item)
 
-				</VictoryChart>
+										return (
+											<VictoryGroup key={item.id}>
+
+												<VictoryArea 
+													style={{ data: { fill: "#c43a31", opacity: 0.5 } }}
+													data={points.CLOUD} x='x' y='lsA' y0='lsB'
+													/>
+
+												<VictoryLine 
+													style={{
+														data: { stroke: item.color },
+														parent: { border: item.lineWidth}
+													}}
+													data={points.CL}
+													x='x'
+													y='y'	
+													/>
+												<VictoryLine 
+													style={{
+														data: { stroke: item.color },
+														parent: { border: item.lineWidth}
+													}}
+													data={points.BL}
+													x='x'
+													y='y'	
+													/>
+												<VictoryLine 
+													style={{
+														data: { stroke: item.color },
+														parent: { border: item.lineWidth}
+													}}
+													data={points.LSA}
+													x='x'
+													y='y'	
+													/>
+												<VictoryLine 
+													style={{
+														data: { stroke: item.color },
+														parent: { border: item.lineWidth}
+													}}
+													data={points.LSB}
+													x='x'
+													y='y'	
+													/>
+												<VictoryLine 
+													style={{
+														data: { stroke: item.color },
+														parent: { border: item.lineWidth}
+													}}
+													data={points.LAG}
+													x='x'
+													y='y'	
+													/>
+
+											</VictoryGroup>
+										)
+
+									}
+
+								return null
+							})
+
+						}
+
+						<VictoryLegend x={12} y={10}
+							title={`${symbol}: ${tf}`}
+							centerTitle
+							orientation="horizontal"
+							gutter={20}
+							style={ {title: {fontSize: 20 } }}
+							data={[]}
+							/>
+
+					</VictoryChart>
+
+				}
 
 				{ data && <NewWindow 
 							indicators={indicators} symbol={symbol} data={data}
@@ -415,9 +424,9 @@ const Chart = (props) => {
 							noOfWindows={noOfWindows} zoom={zoom} yTicks={yTicks} />
 				}
 
-
-
 				{ modal && <Modal setModal={setModal} symbol={symbol} indicators={indicators} /> }
+
+				{ !assets[symbol] && <Loader />}
 
 			</div>
 

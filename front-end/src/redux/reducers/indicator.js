@@ -1,6 +1,7 @@
 const indicatorReducer = (state, payload) => {
 
     const symbol = payload?.symbol
+    
     const indicator = payload?.indicator
 
     const indicators = {...state.indicators}
@@ -19,7 +20,7 @@ const indicatorReducer = (state, payload) => {
 
 const updateIndicator = (state, payload) => {
 
-    const symbol = payload?.symbol
+    const symbol = payload?.metadata?.symbol
     const indicator = payload?.indicator
     const instruction = payload?.instruction
 

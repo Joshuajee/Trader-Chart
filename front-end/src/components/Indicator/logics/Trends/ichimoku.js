@@ -70,10 +70,6 @@ const ichimoku = (data, indicator) => {
 
     }
 
-
-    console.log(LAG)
-    console.log(LSA)
-
     const output = {
         CL: CL,
         BL: BL,

@@ -11,7 +11,6 @@ body {
     top: 5em;
     left: 15em;
     /*bottom: 2em;*/
-    z-index: 4;
     /*width: 66em;*/
 }
 
@@ -22,7 +21,6 @@ body {
         position: absolute;
         top: 5em;
         left: 0.4em;
-        z-index: 4;
         /*width: 20em;*/
     }
     
