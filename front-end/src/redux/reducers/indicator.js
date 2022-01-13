@@ -20,7 +20,7 @@ const indicatorReducer = (state, payload) => {
 
 const updateIndicator = (state, payload) => {
 
-    const symbol = payload?.metadata?.symbol
+    const symbol = payload?.symbol
     const indicator = payload?.indicator
     const instruction = payload?.instruction
 
@@ -29,7 +29,7 @@ const updateIndicator = (state, payload) => {
 
     const array = []
 
-    indArray.forEach(element => {
+    indArray?.forEach(element => {
 
         if (element.id === indicator.id) {
 

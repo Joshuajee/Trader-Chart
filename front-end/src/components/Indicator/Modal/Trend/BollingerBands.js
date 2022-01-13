@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Action from "../Utils/Action";
 import ApplyTo from "../Utils/ApplyTo";
 import ColorPicker, { Color } from "../Utils/ColorPicker";
@@ -29,16 +29,16 @@ const BollingerBands = (props) => {
                     <div className="parameter"> Period: 
                     
                         <input 
-                            type={'text'} 
+                            type={'number'} 
                             defaultValue={20}
-                            onChange={(e) => setData({...data, period: e.target.value})} /> 
+                            onChange={(e) => setData({...data, period: Number(e.target.value)})} /> 
                     
                     </div>
 
                     <div className="parameter"> Deviation:
 
                         <input 
-                            type={'text'} 
+                            type={'number'} 
                             defaultValue={2.000}
                             onChange={(e) => setData({...data, deviation: Number(e.target.value)})} />
 

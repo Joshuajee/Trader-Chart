@@ -42,7 +42,7 @@ const ema = (data, indicator) => {
 
         const k =  2 / (indicator.period - index + 1);
 
-        if (indicator.period === index + 1) return choosePrice(indicator.applyTo, points[indicator.period - index - 1]) * k
+        if (indicator.period === index) return choosePrice(indicator.applyTo, points[indicator.period - index]) * k
 
         return choosePrice(indicator.applyTo, points[indicator.period - index - 1]) * k + _ema(points, index + 1) * (1 - k);
 
@@ -113,7 +113,9 @@ const choosePrice = (applyTo, data) => {
         case 'typical':
             return (data.values.high + data.values.low + data.values.close) / 3;
         case 'weighted':
-            return (data.values.high + data.values.low + data.values.close * 2) / 4;;
+            return (data.values.high + data.values.low + data.values.close * 2) / 4;
+        case 'ranged':
+            return (data.values.high + data.values.low) / 4;;
         default:
             console.log('invalid application')
 

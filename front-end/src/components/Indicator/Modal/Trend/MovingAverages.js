@@ -34,7 +34,7 @@ const MovingAverages = (props) => {
                     <input 
                         type={'text'} 
                         defaultValue={data?.period}
-                        onChange={(e) => setData({...data, period: e.target.value})} /> 
+                        onChange={(e) => setData({...data, period: Number(e.target.value)})} /> 
                 
                 </div>
 

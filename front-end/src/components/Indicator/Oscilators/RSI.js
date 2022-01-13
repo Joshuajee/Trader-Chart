@@ -1,12 +1,15 @@
 import { VictoryChart, VictoryZoomContainer, VictoryAxis, VictoryLine, VictoryLegend  } from "victory";
 import { xAxisStyles, xAxisTicks } from "../../Charts/logics/xAxis";
-
+import { useState } from "react";
+import { countDecimals } from "../../Charts/logics/functions";
 
 const RSI = (props) => {
 
     const { data, width, windowHeight, minX, maxX, item, points,
         onDomainChange, rsiAxis, noOfWindows, zoom
     } = props
+
+    const [decimal] = useState(countDecimals(data[data.length - 1].values.high))
 
     return (
         <VictoryChart
@@ -70,7 +73,7 @@ const RSI = (props) => {
             />
 
             <VictoryLegend x={12} y={10}
-						title={`RSI(${item.period}) ${points[points.length - 1].y}`}
+						title={`RSI(${item.period}) ${points[points.length - 1].y.toFixed(decimal)}`}
 						centerTitle
 						orientation="horizontal"
 						gutter={20}

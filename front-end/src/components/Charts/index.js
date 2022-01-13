@@ -57,7 +57,7 @@ const Chart = (props) => {
 	const [start, setStart] = useState(0)
 	const [count] = useState(500)
 	const [symbol, setSymbol] = useState('EURUSD')
-	const [tf, setTf] = useState('M1')
+	const [tf,] = useState('M1')
 	const [zoom, setZoom] = useState(Math.ceil(width * 0.1))
 	const [minX, setMinX] = useState(0)
 	const [maxX, setMaxX] = useState(zoom)
@@ -185,6 +185,7 @@ const Chart = (props) => {
 		
 	}, [start, count, symbol, updateAssets, tf])
 
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	useEffect(() => domainController(assets, symbol, zoom, count, start, setData, setMaxX, setMinX, setPoints), [assets, symbol, zoom, count])
 
 	useEffect(() => {
@@ -420,7 +421,7 @@ const Chart = (props) => {
 							indicators={indicators} symbol={symbol} data={data}
 							findIndicator={findIndicator} width={width} windowHeight={windowHeight} 
 							minX={minX} maxX={maxX} onDomainChange={onDomainChange} rsiAxis={rsiAxis} 
-							noOfWindows={noOfWindows} zoom={zoom} yTicks={yTicks} />
+							noOfWindows={noOfWindows} zoom={zoom} yTicks={yTicks} points={points} />
 				}
 
 				{ modal && <Modal setModal={setModal} symbol={symbol} indicators={indicators} /> }

@@ -34,27 +34,27 @@ const MACD = (props) => {
                 <div className="parameter"> Fast EMA: 
                 
                     <input 
-                        type={'text'} 
+                        type={'number'} 
                         defaultValue={data.fastEMA}
-                        onChange={(e) => setData({...data, fastEMA: e.target.value})} /> 
+                        onChange={(e) => setData({...data, fastEMA: Number(e.target.value)})} /> 
                 
                 </div>
 
                 <div className="parameter"> Slow EMA: 
                     
                     <input 
-                        type={'text'} 
+                        type={'number'}  
                         defaultValue={data.slowEMA}
-                        onChange={(e) => setData({...data, slowEMA: e.target.value})} /> 
+                        onChange={(e) => setData({...data, slowEMA: Number(e.target.value)})} /> 
                 
                 </div>
 
                 <div className="parameter"> MACD SMA: 
                     
                     <input 
-                        type={'text'} 
+                        type={'number'} 
                         defaultValue={data.macdSMA}
-                        onChange={(e) => setData({...data, macdSMA: e.target.value})} /> 
+                        onChange={(e) => setData({...data, macdSMA: Number(e.target.value)})} /> 
                 
                 </div>
 

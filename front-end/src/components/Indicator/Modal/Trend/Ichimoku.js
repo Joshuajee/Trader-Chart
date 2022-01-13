@@ -39,27 +39,27 @@ const Ichimoku = (props) => {
                 <div className="parameter"> Tenkan-sen: 
                 
                     <input 
-                        type={'text'} 
+                        type={'number'} 
                         defaultValue={data.tenkanSen}
-                        onChange={(e) => setData({...data, tenkanSen: e.target.value})} /> 
+                        onChange={(e) => setData({...data, tenkanSen: Number(e.target.value)})} /> 
                 
                 </div>
 
                 <div className="parameter"> Kijun-sen: 
                     
                     <input 
-                        type={'text'} 
+                        type={'number'}  
                         defaultValue={data.kijunSen}
-                        onChange={(e) => setData({...data, kijunSen: e.target.value})} /> 
+                        onChange={(e) => setData({...data, kijunSen: Number(e.target.value)})} /> 
                 
                 </div>
 
                 <div className="parameter"> Senkou Span B: 
                     
                     <input 
-                        type={'text'} 
+                        type={'number'} 
                         defaultValue={data.senkou}
-                        onChange={(e) => setData({...data, senkou: e.target.value})} /> 
+                        onChange={(e) => setData({...data, senkou: Number(e.target.value)})} /> 
                 
                 </div>
 

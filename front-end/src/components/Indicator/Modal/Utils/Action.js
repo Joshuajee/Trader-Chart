@@ -2,6 +2,8 @@ const Action = (props) => {
 
     const { updateIndicator, addIndicator, symbol, setModal, data, update } = props
 
+    console.log(symbol)
+
     return <div>
 
                 { !update &&

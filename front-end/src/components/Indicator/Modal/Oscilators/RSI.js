@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Action from "../Utils/Action";
 import  ApplyTo from "../Utils/ApplyTo";
 import ColorPicker, { Color } from "../Utils/ColorPicker";
@@ -31,21 +31,21 @@ const RSI = (props) => {
             <div className="parameter"> Period: 
             
                 <input 
-                    type={'text'} 
+                    type={'number'} 
                     defaultValue={data.period}
-                    onChange={(e) => setData({...data, period: e.target.value})} /> 
+                    onChange={(e) => setData({...data, period: Number(e.target.value)})} /> 
             
             </div>
 
             <div className="parameter"> Levels:
 
                 <input 
-                    type={'text'} 
+                    type={'number'} 
                     defaultValue={70}
                     onChange={(e) => setData({...data, upperLevel: Number(e.target.value)})} />
 
                 <input 
-                    type={'text'} 
+                    type={'number'} 
                     defaultValue={30}
                     onChange={(e) => setData({...data, lowerLevel: Number(e.target.value)})} />
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Action from "../Utils/Action";
 import  ApplyTo from "../Utils/ApplyTo";
 import ColorPicker, { Color } from "../Utils/ColorPicker";
@@ -31,9 +31,9 @@ const ATR = (props) => {
                 <div className="parameter"> Period: 
                 
                     <input 
-                        type={'text'} 
+                        type={'number'} 
                         defaultValue={data.period}
-                        onChange={(e) => setData({...data, period: e.target.value})} /> 
+                        onChange={(e) => setData({...data, period: Number(e.target.value)})} /> 
                 
                 </div>
 

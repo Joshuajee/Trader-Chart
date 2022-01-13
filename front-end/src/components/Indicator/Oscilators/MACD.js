@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { VictoryChart, VictoryZoomContainer, VictoryAxis, VictoryLine, VictoryBar, VictoryLegend  } from "victory";
 import { xAxisStyles, xAxisTicks } from "../../Charts/logics/xAxis";
+import { countDecimals } from "../../Charts/logics/functions";
 
 
 const MACD = (props) => {
@@ -14,6 +15,8 @@ const MACD = (props) => {
     const [high, setHigh] = useState(null)
 	const [low, setLow] = useState(null)
     const [yTicks, setYTicks] = useState([])
+
+    const [decimal] = useState(countDecimals(data[data.length - 1].values.high))
  
     useEffect(() => {
 
@@ -38,13 +41,13 @@ const MACD = (props) => {
             let array = []
 
             for (let i = min; i < max; i += interval) {
-                array.push(Number(i.toFixed(8)))
+                array.push(Number(i.toFixed(decimal + 3)))
             }
 
             setYTicks(array)
         }
 
-	}, [high, low])
+	}, [high, low, decimal])
 
     useEffect(() => {
 
@@ -125,7 +128,7 @@ const MACD = (props) => {
                 />
 
             <VictoryLegend x={12} y={10}
-                title={`MACD (${item.fastEMA}, ${item.slowEMA}, ${item.macdSMA}) ${points[points.length - 1].macdLine} ${points[points.length - 1].macdHist}`}
+                title={`MACD (${item.fastEMA}, ${item.slowEMA}, ${item.macdSMA}) ${points[points.length - 1].macdLine.toFixed(decimal + 3)} ${points[points.length - 1].macdHist.toFixed(decimal + 3)}`}
                 centerTitle
                 orientation="horizontal"
                 gutter={20}

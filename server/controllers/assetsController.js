@@ -24,12 +24,33 @@ exports.getCategory = catchAsync(async (req, res, next) => {
 
     const category = await Asset.distinct('metadata')
 
+    res.json({
+        status: 'success',
+        data: category,
+        })
+});
 
+exports.getTimeFrame = catchAsync(async (req, res, next) => {
+
+    const category = await Asset.aggregate([
+        {
+            $match: {
+                metadata: `symbol.EURUSD` ,
+            }
+        },
+/*        {
+          $project: {
+            month: { $values: '$values' },
+            name: '$_id',
+            _id: 0
+          }
+        },
+        { $group: { _id: '$month', number: { $sum: 1 } } },
+        { $sort: { _id: 1 } }*/
+      ]);
 
     res.json({
         status: 'success',
         data: category,
-
         })
 });
-

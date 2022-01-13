@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { VictoryChart, VictoryZoomContainer, VictoryAxis, VictoryLine, VictoryLegend } from "victory";
 import { xAxisStyles, xAxisTicks } from "../../Charts/logics/xAxis";
-
+import { countDecimals } from "../../Charts/logics/functions";
 
 const ATR = (props) => {
 
@@ -14,6 +14,8 @@ const ATR = (props) => {
     const [high, setHigh] = useState(null)
 	const [low, setLow] = useState(null)
     const [yTicks, setYTicks] = useState([])
+
+    const [decimal] = useState(countDecimals(data[data.length - 1].values.high))
  
     useEffect(() => {
 
@@ -38,13 +40,13 @@ const ATR = (props) => {
             let array = []
 
             for (let i = min; i < max; i += interval) {
-                array.push(Number(i.toFixed(8)))
+                array.push(Number(i.toFixed(decimal + 3)))
             }
 
             setYTicks(array)
         }
 
-	}, [high, low])
+	}, [high, low, decimal])
 
     useEffect(() => {
 
@@ -113,7 +115,7 @@ const ATR = (props) => {
             />
 
            <VictoryLegend x={12} y={10}
-                title={`ATR(${item.period}) ${points[points.length - 1].atr}`}
+                title={`ATR(${item.period}) ${points[points.length - 1].atr.toFixed(decimal + 3)}`}
                 centerTitle
                 orientation="horizontal"
                 gutter={20}
