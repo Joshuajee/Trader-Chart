@@ -14,7 +14,6 @@ import { yAxisStyles, yAxisTicks } from "./logics/yAxis";
 import { labels } from "./logics/candleChart";
 import NewWindow from '../Indicator/Oscilators';
 import { useParams } from 'react-router';
-import Spinner from '../Loaders/Spinner';
 import Loader from '../Loaders/Loader';
 
 
@@ -59,7 +58,7 @@ const Chart = (props) => {
 	const [count] = useState(500)
 	const [symbol, setSymbol] = useState('EURUSD')
 	const [tf, setTf] = useState('M1')
-	const [zoom, setZoom] = useState(50)
+	const [zoom, setZoom] = useState(Math.ceil(width * 0.1))
 	const [minX, setMinX] = useState(0)
 	const [maxX, setMaxX] = useState(zoom)
 	const [candleRatio, setCandleRatio] = useState(20 - zoom / 10)
@@ -334,7 +333,7 @@ const Chart = (props) => {
 
 									} else 	if (item.type === 'PAR') {
 
-										const points = findIndicator(data, item)
+										//const points = findIndicator(data, item)
 
 									} else if (item.type === 'ICK') {
 
@@ -344,14 +343,14 @@ const Chart = (props) => {
 											<VictoryGroup key={item.id}>
 
 												<VictoryArea 
-													style={{ data: { fill: "#c43a31", opacity: 0.5 } }}
+													style={{ data: { fill: item.chikouColor, opacity: 0.5 } }}
 													data={points.CLOUD} x='x' y='lsA' y0='lsB'
 													/>
 
 												<VictoryLine 
 													style={{
-														data: { stroke: item.color },
-														parent: { border: item.lineWidth}
+														data: { stroke: item.tenkanSenColor },
+														parent: { border: item.tenkanSenWidth }
 													}}
 													data={points.CL}
 													x='x'
@@ -359,8 +358,8 @@ const Chart = (props) => {
 													/>
 												<VictoryLine 
 													style={{
-														data: { stroke: item.color },
-														parent: { border: item.lineWidth}
+														data: { stroke: item.kijunSenColor },
+														parent: { border: item.kijunSenWidth}
 													}}
 													data={points.BL}
 													x='x'
@@ -368,8 +367,8 @@ const Chart = (props) => {
 													/>
 												<VictoryLine 
 													style={{
-														data: { stroke: item.color },
-														parent: { border: item.lineWidth}
+														data: { stroke: item.upKumoColor },
+														parent: { border: item.upKumoWidth }
 													}}
 													data={points.LSA}
 													x='x'
@@ -377,8 +376,8 @@ const Chart = (props) => {
 													/>
 												<VictoryLine 
 													style={{
-														data: { stroke: item.color },
-														parent: { border: item.lineWidth}
+														data: { stroke: item.downKumoColor },
+														parent: { border: item.downKumoWidth }
 													}}
 													data={points.LSB}
 													x='x'
@@ -386,8 +385,8 @@ const Chart = (props) => {
 													/>
 												<VictoryLine 
 													style={{
-														data: { stroke: item.color },
-														parent: { border: item.lineWidth}
+														data: { stroke: item.chikouColor },
+														parent: { border: item.chikouWidth }
 													}}
 													data={points.LAG}
 													x='x'

@@ -18,21 +18,12 @@ const RSI = (props) => {
 
     const { addIndicator, symbol, setModal, update, updateIndicator, deleteIndicator } = props
     const [data, setData] = useState(update? update : indicator)
-    const [color, setColor] = useState(data.color)
     const [pickColor, setPickColor] = useState(false)
-
-    useEffect(() => {
-        
-        setData(x => { x.color = color; return x; })
-
-    }, [color])
-    
 
     return (
         <div className="container">
 
-        { (pickColor) && <ColorPicker setPickColor={setPickColor} color={color} setColor={setColor} /> }
-
+        { (pickColor) && <ColorPicker data={data} setData={setData} field={'color'} setPickColor={setPickColor} /> }
 
         {!pickColor &&
             <>
@@ -67,7 +58,7 @@ const RSI = (props) => {
                 Color: 
 
                 <div style={{width: 80}} className="color-picker" onClick={() => setPickColor(true)} >
-                    <Color color={data.color} width={'100%'} setColor={setColor} />
+                    <Color color={data.color} width={'100%'} />
                 </div>
 
             </div> 

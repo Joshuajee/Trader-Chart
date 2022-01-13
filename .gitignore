@@ -6,8 +6,11 @@ node_modules
 
 /sampleData/Forex/AUDUSD.json
 /sampleData/Forex/GBPUSD.json
+/sampleData/Forex/USDJPY.json
+/sampleData/Forex/USDCAD.json
 
 /sampleData/Crypto/BTCUSD.json
 /sampleData/Crypto/ETHUSD.json
 
-/sampleData/Metals/AUDUSD.json
+/sampleData/Metals/XAUUSD.json
+/sampleData/Metals/XPDUSD.json

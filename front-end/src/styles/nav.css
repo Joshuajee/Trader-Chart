@@ -35,43 +35,42 @@ a:-webkit-any-link {
 .sidenav .navs {
     position: absolute;
     top: 4em;
+    width: 100%;
 }
 
 .sidenav .close {
     position: absolute;
-    left: 16em;
+    left: 86%;
 }
 
 .sidenav .navs .nav-link {
-    font-size: 18px;
-    width: 11em;
+    width: 88%;
     padding: 4px 0px 0px 4px;
-    cursor: pointer;
 }
 
 .sidenav .navs .nav-link .link {
     font-size: 18px;
-    width: 11em;
-    height: 36px;
+    width: 100%;
+    height: 38px;
     padding: 4px 0px 0px 15px;
     cursor: pointer;
 }
 
 .sidenav .navs .nav-link .link:hover {
-    background-color: rgb(44, 59, 65, 0.8); 
+   background-color: rgb(44, 59, 65, 0.8);
 }
 
-.sidenav .navs .nav-link .link .sub {
-    font-size: 18px;
-    width: 10em;
-    padding: 4px 0px 0px 15px;
-    background-color: rgb(44, 59, 65, 0.8);
-}
 
-.sidenav .navs .nav-link .link .sub .link{
+.sidenav .navs .nav-link .link div .link{
     height: 24px;
-    color: white;
+    font-size: 10px;
+    padding: 20px 0px 0px 15px;
 }
+
+.sidenav .navs .nav-link .link div .link :hover {
+
+}
+
 
 .tool-bar {
     position: fixed;
@@ -136,7 +135,7 @@ a:-webkit-any-link {
 
     .sidenav-mov .navs .nav-link {
         font-size: 18px;
-        width: 11em;
+        width: 88%;
         padding: 4px 0px 0px 4px;
         cursor: pointer;
     }
@@ -146,17 +145,6 @@ a:-webkit-any-link {
         width: 15em;
         min-height: 50px;
         padding: 4px 0px 0px 30px;
-    }
-
-    .sidenav-mov .navs .nav-link .link .sub {
-        font-size: 18px;
-        width: 15em;
-        padding: 4px 0px 0px 30px;
-        background-color: rgb(44, 59, 65, 0.8);
-    }
-
-    .sidenav-mov .navs .nav-link .link .sub .link{
-        height: 24px;
     }
     
     .tool-bar {

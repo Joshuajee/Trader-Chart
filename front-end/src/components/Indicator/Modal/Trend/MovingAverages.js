@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Action from "../Utils/Action";
 import ApplyTo from "../Utils/ApplyTo";
 import ColorPicker, { Color } from "../Utils/ColorPicker";
@@ -18,20 +18,13 @@ const MovingAverages = (props) => {
     const { addIndicator, updateIndicator, deleteIndicator, setModal, symbol, update } = props
 
     const [data, setData] = useState(update? update : indicator)
-    const [color, setColor] = useState(data.color)
     const [pickColor, setPickColor] = useState(false)
 
-    useEffect(() => {
-        
-        setData(x => { x.color = color; return x; })
-
-    }, [color])
-    
 
     return (
         <div className="container">
 
-            { (pickColor) && <ColorPicker setPickColor={setPickColor} color={color} setColor={setColor} /> }
+            { (pickColor) && <ColorPicker data={data} setData={setData} field={'color'} setPickColor={setPickColor} /> }
 
             {!pickColor &&
                 <>
@@ -41,18 +34,20 @@ const MovingAverages = (props) => {
                     <input 
                         type={'text'} 
                         defaultValue={data?.period}
-                        onChange={(e) => setData({...data, period: e.target.value})} /> </div>
+                        onChange={(e) => setData({...data, period: e.target.value})} /> 
+                
+                </div>
 
-                    <div className="parameter"> 
+                <div className="parameter"> 
 
-                        Method: 
-                        <select onClick={(e) => setData({...data, method: e.target.value})} > 
-                            <option selected={data?.method === 'SMA' ? 'selected' : ''} value={'SMA'}> Simple Moving Average </option> 
-                            <option selected={data?.method === 'EMA' ? 'selected' : ''} value={'EMA'}>Exponetial Moving Average </option> 
-                            <option selected={data?.method === 'LNW' ? 'selected' : ''} value={'LNW'}> Linear Weighted Moving Average </option> 
-                        </select> 
+                    Method: 
+                    <select onClick={(e) => setData({...data, method: e.target.value})} > 
+                        <option selected={data?.method === 'SMA' ? 'selected' : ''} value={'SMA'}> Simple Moving Average </option> 
+                        <option selected={data?.method === 'EMA' ? 'selected' : ''} value={'EMA'}>Exponetial Moving Average </option> 
+                        <option selected={data?.method === 'LNW' ? 'selected' : ''} value={'LNW'}> Linear Weighted Moving Average </option> 
+                    </select> 
 
-                    </div>
+                </div>
 
 
                 <ApplyTo setData={setData} data={data}  />
@@ -62,7 +57,7 @@ const MovingAverages = (props) => {
                     Color: 
 
                     <div className="color-picker" style={{width: 80}} onClick={() => setPickColor(true)} >
-                        <Color color={data.color} width={'100%'} setColor={setColor} />
+                        <Color color={data.color} width={'100%'} />
                     </div>
                 </div>
 

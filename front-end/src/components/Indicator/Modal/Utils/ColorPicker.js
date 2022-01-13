@@ -1,9 +1,14 @@
-
+import { useEffect, useState } from "react";
 
 const ColorPicker = (props) => {
 
-    const { setColor, color, setPickColor } = props
+    const { setData, data, field, setPickColor } = props
 
+    const [color, setColor] = useState(data[field])
+
+    useEffect(() => {
+        setData( d => { d[field] = color; return d})
+    }, [field, color, setData])
 
     return( 
             <div className='color-picker'>

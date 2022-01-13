@@ -15,7 +15,6 @@ const ChooseIndicator = (props) => {
                     <ul>
                         <li onClick={() => chooseIndicator("MA")}>Moving Average</li>
                         <li onClick={() => chooseIndicator("BB")}>Bollinger Band</li>
-                        <li onClick={() => chooseIndicator("PAR")}>Parabolic Sar</li>
                         <li onClick={() => chooseIndicator("ICK")}>Ichimoku Kinko Hyo</li>
                     </ul>
 

@@ -41,9 +41,20 @@
     width: 100%;
 }
 
+.modal .container .parameter input {
+    width: 30%;
+    float: right;
+}
+
+.modal .container .parameter select {
+    width: 30%;
+    float: right;
+}
+
+
 .modal .container .parameter .color-picker{
     width: 20%;
-    display: inline-flex;
+    float: right;
 }
 
 

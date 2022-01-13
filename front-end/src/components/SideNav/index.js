@@ -27,14 +27,8 @@ const SideNav = (props) => {
 
     const { sideNav, showSideNav, updateNavs, navs } = props
 
-    const [loading, setLoading] = useState(false)
+    const [, setLoading] = useState(false)
     const [categories, setCategories] = useState([])
-
-
-    useEffect(() => {
-
-        
-    }, [categories])
 
 
     useEffect(() => {
@@ -97,7 +91,7 @@ const SideNav = (props) => {
 
             <div className='navs'>
 
-                { navs.map(nav => <SideNavLink text={capFirstLetter(nav.category)} data={nav.symbol} />) }
+                { navs.map(nav => <SideNavLink showSideNav={showSideNav} text={capFirstLetter(nav.category)} data={nav.symbol} />) }
 
             </div>
 

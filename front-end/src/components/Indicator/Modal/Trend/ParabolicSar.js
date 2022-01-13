@@ -19,13 +19,6 @@ const ParabolicSar = (props) => {
     const [color, setColor] = useState(data.color)
     const [pickColor, setPickColor] = useState(false)
 
-    useEffect(() => {
-        
-        setData(x => { x.color = color; return x; })
-
-    }, [color])
-    
-
 
     return (
         <div className="container">
