@@ -212,6 +212,12 @@ const Chart = (props) => {
 		setWindowHeight(Math.abs(initialHeight - height) / noOfWindows )
 
 	}, [initialHeight, height, noOfWindows])
+
+
+	useEffect(()=> {
+		const json = JSON.stringify(indicators)
+		localStorage.setItem('indicators', json)
+	}, [indicators])
 	
 	return (
 		<div>
@@ -225,7 +231,7 @@ const Chart = (props) => {
 
 			<div className="chart">
 
-				{assets[symbol] &&
+				{(assets[symbol] && data) &&
 					<VictoryChart
 						height={height}
 						width={width}
@@ -404,7 +410,7 @@ const Chart = (props) => {
 
 						}
 
-						<VictoryLegend x={12} y={10}
+						<VictoryLegend x={0} y={0}
 							title={`${symbol}: ${tf}`}
 							centerTitle
 							orientation="horizontal"
@@ -417,7 +423,7 @@ const Chart = (props) => {
 
 				}
 
-				{ data && <NewWindow 
+				{ (data && assets[symbol]) && <NewWindow 
 							indicators={indicators} symbol={symbol} data={data}
 							findIndicator={findIndicator} width={width} windowHeight={windowHeight} 
 							minX={minX} maxX={maxX} onDomainChange={onDomainChange} rsiAxis={rsiAxis} 

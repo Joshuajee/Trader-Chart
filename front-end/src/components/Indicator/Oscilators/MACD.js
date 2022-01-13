@@ -127,7 +127,7 @@ const MACD = (props) => {
                 y='macdLine'	
                 />
 
-            <VictoryLegend x={12} y={10}
+            <VictoryLegend x={0} y={0}
                 title={`MACD (${item.fastEMA}, ${item.slowEMA}, ${item.macdSMA}) ${points[points.length - 1].macdLine.toFixed(decimal + 3)} ${points[points.length - 1].macdHist.toFixed(decimal + 3)}`}
                 centerTitle
                 orientation="horizontal"

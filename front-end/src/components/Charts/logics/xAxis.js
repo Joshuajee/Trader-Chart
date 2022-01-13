@@ -22,15 +22,16 @@ const xAxisTicks = (t, i, noOfWindows, width, zoom) => {
     const date = moment.utc(t).format("MMM Do, h:mm")
 
     if (width <= 500)						
-        if (i % (zoom / 2 ) === 0) return `${date}`;
+        if (i % (Math.ceil(zoom / 2 )) === 0) return `${date}`;
         else return '';
 
     if (width <= 600)						
-        if (i % (zoom / 3 ) === 0) return `${date}`;
+        if (i % (Math.ceil(zoom / 3 )) === 0) return `${date}`;
         else return '';
 
-    if (i % (zoom / 5 ) === 0) return `${date}`;
+    if (i % (Math.ceil(zoom / 5)) === 0) return `${date}`;
     else return '';
+
 
 }
 

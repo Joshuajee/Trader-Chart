@@ -139,3 +139,8 @@
     border: 4px solid black;
     cursor: pointer;
 }
+
+
+.actions {
+    margin-top: 10%;
+}

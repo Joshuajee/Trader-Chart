@@ -40,9 +40,9 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
+    <li><a href="#preview">Preview</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
@@ -51,9 +51,9 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-![Trader Chart Screen Shot](./images/home.png "App screenshot")
+This is a charting software for doing technical analysis on the Forex, Crypto and Stock market etc. It comes with Trend indicators like the Moving Average, Bollinger Band, Ichimoku Kinkō Hyō. It also comes with oscillators like the Relative strength index, Moving Average Convergence Divergence and Average True Range.
 
-This App is a web based trading charting platform where you can carry out technical analysis on various assets
+![Trader Chart Screen Shot](./images/chart.png "App screenshot")
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -86,7 +86,6 @@ This is an example of how to list things you need to use the software and how to
 
 ### Installation
 
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
 
 1. Create A time Series collection in Mongodb [Click Here](https://docs.mongodb.com/manual/core/timeseries-collections/)
     a time series collection can only be created in a Dedicated cluster, the cluster need to be version 5.0.
@@ -112,7 +111,7 @@ _Below is an example of how you can instruct your audience on installing and set
 6. Follow the steps below to populate your Collections with data:
     Note these data were gotten from MT5 as csv file then in was converted to Json format
 
-    1. ```sh
+    ```sh
         node upload.js
     ```
     you be prompt type `forex` for asset type and `eurusd` for asset this is case insensitive.
@@ -132,11 +131,11 @@ _Below is an example of how you can instruct your audience on installing and set
 
     ![Prompt](./images/files.png "App screenshot")
 
-    2. The data used in this app are gotten from Metatrader 5, if you want more assets download the app, export the symbol you want as csv convert into to json [https://csvjson.com/](https://csvjson.com) or with any other csv to json converter you know. 
+    The data used in this app are gotten from Metatrader 5, if you want more assets download the app, export the symbol you want as csv convert into to json [https://csvjson.com/](https://csvjson.com) or with any other csv to json converter you know. 
     Then replace `<DATE>, <TIME>, <OPEN>, <HIGH>, <LOW>, <CLOSE>, <TICKVO>, <VOL>, <SPREAD>` with
     date, time, open, high, low, close, tickvol, vol, spread respectively using `ctrl h` and replace all on your text editor.
 
-    3. if you want new `assetType` please create a new directory in the sample data directory and put the json file you want to upload, the asset name must be the asset symbole
+    If you want new `assetType` please create a new directory in the sample data directory and put the json file you want to upload, the asset name must be the asset symbole
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -148,7 +147,15 @@ _Below is an example of how you can instruct your audience on installing and set
 
   ![Preview](./images/indicators.png "App screenshot")
 
-  ![Preview](./images/marsi.png "App screenshot")
+  ![Preview](./images/ma-modal.png "App screenshot")
+
+  ![Oscilators](./images/oscilators.png "App screenshot")
+
+  ![ick-modal](./images/ick-modal.png "App screenshot")
+
+  ![ick-cloud](./images/ick-cloud.png "App screenshot")
+
+  ![Bollinger Band and ATR](./images/bb-atr.png "App screenshot")
 
 
 

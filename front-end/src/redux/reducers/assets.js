@@ -21,8 +21,6 @@ const upDateByScroll = (assets, payload) => {
 
     assets[symbol].data = [...payload.data, ...assets[symbol].data]
 
-    console.log('asset ', assets)
-
     return assets
 }
 

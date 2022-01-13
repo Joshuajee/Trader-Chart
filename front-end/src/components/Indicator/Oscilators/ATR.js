@@ -114,7 +114,7 @@ const ATR = (props) => {
                 tickFormat={(t, i) => xAxisTicks(t, i, noOfWindows, width, zoom)}
             />
 
-           <VictoryLegend x={12} y={10}
+           <VictoryLegend x={0} y={0}
                 title={`ATR(${item.period}) ${points[points.length - 1].atr.toFixed(decimal + 3)}`}
                 centerTitle
                 orientation="horizontal"

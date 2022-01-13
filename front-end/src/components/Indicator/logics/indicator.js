@@ -24,7 +24,7 @@ const findIndicator = (data, indicator) => {
         case 'RSI':
             return rsi(data, indicator)//.splice(indicator.period, range);
         case 'ATR':
-                return atr(data, indicator)//.splice(indicator.period, range);
+            return atr(data, indicator)//.splice(indicator.period, range);
         case 'MACD':
             return macd(data, indicator)//.splice(indicator.period, range);
         default:

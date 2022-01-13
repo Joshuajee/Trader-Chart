@@ -2,9 +2,10 @@ import assetReducer from './assets';
 import { SIDENAV, ASSETS, INDICATORS, UPDATE_INDICATOR, NAVS } from "../constants/action-types";
 import indicatorReducer, { updateIndicator } from './indicator';
 
+const indicator = localStorage.getItem('indicators')
 
 const initialState = {
-    indicators: {},
+    indicators: indicator? JSON.parse(indicator): {},
     sideNav: false,
     assets: {},
     navs: []

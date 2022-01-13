@@ -47,8 +47,10 @@ const ColorPicker = (props) => {
                 <Color color='red' setColor={setColor}/>
 
                 <br/>
-                <button onClick={() => setPickColor(false)}>Select</button>
-                <div className="color" style={{backgroundColor: color}}> </div>
+                <div>
+                    <button style={{backgroundColor: color, borderRadius: '15px', width: '60%', height: '40px', color: 'white', marginTop:'4%'}} onClick={() => setPickColor(false)}>Select</button>
+                </div>
+                
             </div>
             )
 }

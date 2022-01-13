@@ -2,15 +2,13 @@ const Action = (props) => {
 
     const { updateIndicator, addIndicator, symbol, setModal, data, update } = props
 
-    console.log(symbol)
-
-    return <div>
+    return <div className="actions">
 
                 { !update &&
                     <button onClick={() => { 
                         addIndicator({ indicator: data, symbol: symbol }); 
                         setModal(false); 
-                    }} > OK </button>
+                    }} > Save </button>
                 }
 
                 { update &&
@@ -23,7 +21,7 @@ const Action = (props) => {
                         updateIndicator({ indicator: data, symbol: symbol, instruction: 'delete'  }); 
                         setModal(false); 
                     }} > DELETE </button> </> }
-    </div>
+            </div>
 }
 
 

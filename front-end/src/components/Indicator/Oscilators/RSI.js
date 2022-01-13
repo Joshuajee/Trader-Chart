@@ -72,7 +72,7 @@ const RSI = (props) => {
                 tickFormat={(t, i) => xAxisTicks(t, i, noOfWindows, width, zoom)}
             />
 
-            <VictoryLegend x={12} y={10}
+            <VictoryLegend x={0} y={0}
 						title={`RSI(${item.period}) ${points[points.length - 1].y.toFixed(decimal)}`}
 						centerTitle
 						orientation="horizontal"
