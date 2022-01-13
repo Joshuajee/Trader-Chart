@@ -1,19 +1,23 @@
 import { countDecimals } from "./functions"
 
-const zoomOut = (zoom, setZoom) => {
+const zoomOut = (zoom, setZoom, length) => {
+
+        console.log(zoom)
+
+        if (!length) return null
 
         if (zoom >= 2000)
                 console.log('maximum zoom out')
         else if (zoom >= 1000)
-                        setZoom(Math.ceil(zoom + 400))
+                        setZoom(Math.ceil(zoom + 300) < length? Math.ceil(zoom + 300) : length)
         else if (zoom >= 800)
-                        setZoom(Math.ceil(zoom + 200))
+                        setZoom(Math.ceil(zoom + 250) < length? Math.ceil(zoom + 250) : length)
         else if (zoom >= 600)
-                        setZoom(Math.ceil(zoom + 200))
+                        setZoom(Math.ceil(zoom + 150) < length? Math.ceil(zoom + 150) : length)
         else if (zoom >= 400)
-                        setZoom(Math.ceil(zoom + 100))
+                        setZoom(Math.ceil(zoom + 100) < length? Math.ceil(zoom + 100) : length)
         else if (zoom >= 0)
-                        setZoom(Math.ceil(zoom + 50))
+                        setZoom(Math.ceil(zoom + 50) < length? Math.ceil(zoom + 50) : length)
 
 }
 
@@ -74,6 +78,8 @@ const domainController = (assets, symbol, zoom, count, start, setData, setMaxX, 
                 setMaxX(x => x + count)
 
                 setMinX(x => x + count)
+
+                console.log(count)
 
         } 
 

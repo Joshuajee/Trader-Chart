@@ -141,6 +141,12 @@ const Chart = (props) => {
 
 	}, [minX, maxX, zoom, data])
 
+	useEffect(() => {
+		if ((minX / count) < 0.4 && !loading) {
+			//setStart(data?.length ? data.length: 0 )
+		}
+	}, [minX, data, loading, count])
+
 
 	useEffect(() => zoomController(zoom, setToolState), [zoom])
 
@@ -148,12 +154,6 @@ const Chart = (props) => {
 
 		setMinX(Math.ceil(domain.x[0]))
 		setMaxX(Math.ceil(domain.x[1]))
-
-		const minDomain = Math.ceil(domain.x[0]);
-
-		if ((minDomain / count) < 0.3 && !loading && true) {
-			setStart(data.length)
-		}
 
 	}
 
@@ -203,27 +203,32 @@ const Chart = (props) => {
 
 		});
 
+
+
 		setNoOfWindows(count)
 
 	}, [indicators, symbol, heightPadder])
 
 	useEffect(() => {
 
-		setWindowHeight(Math.abs(initialHeight - height) / noOfWindows )
+		if(noOfWindows === 0) {
+			setHeight(window.innerHeight * heightPadder)
+			setWindowHeight(0)
+		} else setWindowHeight(Math.abs(initialHeight - height) / noOfWindows )
 
-	}, [initialHeight, height, noOfWindows])
+	}, [initialHeight, height, heightPadder, noOfWindows])
 
 
 	useEffect(()=> {
 		const json = JSON.stringify(indicators)
 		localStorage.setItem('indicators', json)
 	}, [indicators])
-	
+
 	return (
 		<div>
 			<ToolBar
 				zoomIn={() => zoomIn(zoom, setZoom)}
-				zoomOut={() => zoomOut(zoom, setZoom)}
+				zoomOut={() => zoomOut(zoom, setZoom, data?.length)}
 				state={toolState}
 				setModal={setModal}
 				addIndicator={addIndicator}
@@ -271,7 +276,7 @@ const Chart = (props) => {
 								low={['values', 'low']} close={['values', 'close']}
 								candleColors={{ positive: "green", negative: "red" }}
 								candleRatio={candleRatio}
-								labelComponent={<VictoryTooltip dy={0} />}
+								labelComponent={<VictoryTooltip height={30} dy={0} />}
 								labels={({ datum }) => labels(datum)}
 								/>
 
