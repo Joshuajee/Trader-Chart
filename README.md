@@ -151,6 +151,8 @@ This is an example of how to list things you need to use the software and how to
 
   ![Oscilators](./images/oscilators.png "App screenshot")
 
+  ![color picker](./images/colorpicker.png "App screenshot")
+
   ![ick-modal](./images/ick-modal.png "App screenshot")
 
   ![ick-cloud](./images/ick-cloud.png "App screenshot")
